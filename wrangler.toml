@@ -1,0 +1,8 @@
+name = "nengo-master"
+compatibility_date = "2025-12-27"
+main = "src/index.tsx"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "nengo-db"
+database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
