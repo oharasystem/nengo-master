@@ -17,6 +17,8 @@ const INITIAL_YEAR = 1989;
 const START_YEAR = 1926;
 const END_YEAR = 2026;
 
+
+
 // View: Top Page
 app.get("/", async (c) => {
     // Fetch initial trivia for SSR

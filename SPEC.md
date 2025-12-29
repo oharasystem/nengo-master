@@ -11,32 +11,28 @@ Cloudflare Workers上でHonoを動作させるサーバーレス/エッジ構成
 ### 技術スタック
 - **Runtime:** Cloudflare Workers
 - **Framework:** Hono (v4.x)
-- **Database:** Cloudflare D1 (SQLite)
-- **UI/Styling:** Hono JSX (Server-Side Rendering) + TailwindCSS
-- **Client Logic:** Vanilla TS (最小限のインタラクション用)
+- **Database:** Cloudflare D1 (SQLite) - Native Bindings
+- **UI/Styling:** Hono JSX (Server-Side Rendering) + TailwindCSS (CDN)
+- **Client Logic:** Vanilla TS/JS (Inlined in Layout for interactions)
 
 ### ディレクトリ構成 (Monorepo / Hono Standard)
 
 ```text
 nengo-master/
-├── wrangler.toml         # Cloudflare Workers 設定
+├── wrangler.toml         # Cloudflare Workers 設定 (D1 Binding: DB)
 ├── package.json
-├── drizzle.config.ts     # D1 Schema管理 (Drizzle ORM推奨)
+├── seed_data.sql         # D1 初期データ (Schema & Data)
 ├── src/
 │   ├── index.tsx         # Hono Entry Point & Routing
-│   ├── db/
-│   │   ├── schema.ts     # D1 Table Definitions
-│   │   └── client.ts     # DB Connection
-│   ├── logic/
+│   ├── components/       # JSX Components (UI)
+│   │   ├── Layout.tsx    # Base HTML Wrapper & Client Scripts
+│   │   ├── DrumPicker.tsx # Year Selection UI
+│   │   └── TriviaCard.tsx # Trivia Display UI
+│   ├── utils/            # Logic Modules
 │   │   ├── era.ts        # 和暦・西暦変換ロジック
 │   │   └── resume.ts     # 入学・卒業年度計算ロジック
-│   ├── components/       # JSX Components (UI)
-│   │   ├── Layout.tsx
-│   │   ├── DrumPicker.tsx
-│   │   └── TriviaCard.tsx
-│   └── public/           # Static Assets (Tailwind output, icons)
-└── assets/
-    └── styles.css        # Tailwind Input
+│   └── public/           # Static Assets
+└── tsconfig.json
 ```
 
 ## 3. データベーススキーマ設計 (Cloudflare D1)
@@ -55,35 +51,31 @@ nengo-master/
 
 ## 4. 和暦計算・履歴書計算ロジック仕様
 
-### 4.1 和暦変換ロジック (Era Conversion)
+### 4.1 和暦変換ロジック (`src/utils/era.ts`)
 
 **基本方針:**
 ユーザー入力は「年」単位を基本とするが、改元が行われた年は情報を「併記」する。
+明治、大正、昭和、平成、令和に対応。
 
-| 西暦 | 実装上の扱い | UI表示例 | 備考 |
-| :--- | :--- | :--- | :--- |
-| 1926 | Taisho / Showa | 大正15年 / 昭和元年 | 12/25 改元 |
-| 1989 | Showa / Heisei | 昭和64年 / 平成元年 | 1/7 改元 (昭和は僅か7日間) |
-| 2019 | Heisei / Reiwa | 平成31年 / 令和元年 | 5/1 改元 |
-
-### 4.2 履歴書（学歴）計算ロジック
+### 4.2 履歴書（学歴）計算ロジック (`src/utils/resume.ts`)
 
 **基本方針:**
 - 4月1日生まれまでは「早生まれ」として前年度の学年に含める。
-- 留年や浪人は考慮せず、ストレートでの入学・卒業をデフォルトとする。
+- ストレートでの入学・卒業を想定。
 
-**計算フロー:**
-1. 入力: 生年月日 (YYYY-MM-DD)
-2. 学年基準年度 = (月 <= 3 OR (月=4 AND 日=1)) ? 生まれ年-1 : 生まれ年
-3. 小学校入学: 基準年度 + 7 (4月)
-4. 小学校卒業: 基準年度 + 13 (3月)
-5. 中学校卒業: 基準年度 + 16 (3月)
-6. 高校卒業: 基準年度 + 19 (3月)
-7. 大学卒業: 基準年度 + 23 (3月)
+**入力パラメータ:**
+- `birthDate`: YYYY-MM-DD
+  - 早生まれチェックONの場合: YYYY-01-01として計算
+  - 早生まれチェックOFFの場合: YYYY-05-01として計算
 
 ## 5. API エンドポイント定義
 
-### 5.1 データ取得系
+### 5.1 ページ (SSR)
+#### `GET /`
+- トップページを表示。
+- 初期データ（西暦/和暦/トリビア）をサーバー側でプリフェッチしてレンダリング。
+
+### 5.2 データ取得系
 #### `GET /api/trivia/:year`
 - **Response:**
   ```json
@@ -97,10 +89,11 @@ nengo-master/
   }
   ```
 
-### 5.2 計算系
+### 5.3 計算系
 #### `POST /api/calculate/resume`
-- **Request:** `{ "birthDate": "2000-02-15" }`
-- **Response:** 入学・卒業年度のリスト
+- **Request:** `{ "birthDate": "2000-05-01" }`
+- **Response:** 入学・卒業年度のリスト（小学校入学〜大学卒業）
 
 ## 6. UI/UX (Drum Roll)
-CSS Scroll Snap (`scroll-snap-type: y mandatory`) を使用し、ネイティブアプリのようなピッカーをWebで再現する。JavaScriptはスクロール停止イベントの検知とAPIコールのみを担当する。
+CSS Scroll Snap (`scroll-snap-type: y mandatory`) を使用し、ネイティブアプリのようなピッカーをWebで再現。
+`src/components/Layout.tsx` 内のクライアントサイドスクリプトにより、スクロール停止 (`scroll` event + debounce) を検知して自動的に年を選択し、APIをコールして情報を更新する。

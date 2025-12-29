@@ -2,6 +2,10 @@ name = "nengo-master"
 compatibility_date = "2025-12-27"
 main = "src/index.tsx"
 
+[assets]
+binding = "ASSETS"
+directory = "./src/public"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "nengo-db"
