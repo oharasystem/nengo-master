@@ -3,6 +3,8 @@ import { html } from "hono/html";
 import { Layout } from "./components/Layout";
 import { DrumPicker } from "./components/DrumPicker";
 import { TriviaCard } from "./components/TriviaCard";
+import { YearPage } from "./components/YearPage";
+import { YearIndex } from "./components/YearIndex";
 import { getEra } from "./utils/era";
 import { calculateResume } from "./utils/resume";
 
@@ -12,51 +14,58 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-// Initial Year
+// Constants
 const INITIAL_YEAR = 1989;
-const START_YEAR = 1926;
-const END_YEAR = 2026;
+const START_YEAR = 1900; // Expanded to 1900 as per request
+const END_YEAR = 2100;   // Expanded to 2100 as per request
+const CURRENT_YEAR = new Date().getFullYear();
 
+// --- Helpers ---
+async function getTrivia(db: D1Database, year: number) {
+    try {
+        const { results } = await db.prepare(
+            "SELECT * FROM year_trivia WHERE year_ad = ?"
+        )
+            .bind(year)
+            .all();
+        return results && results.length > 0 ? results[0] : {};
+    } catch (e) {
+        console.error("DB Error:", e);
+        return {};
+    }
+}
 
+// --- Routes ---
 
-// View: Top Page
+// 1. Top Page
 app.get("/", async (c) => {
     // Fetch initial trivia for SSR
     let initialData = { era: "", trivia: {} };
     try {
-        const { results } = await c.env.DB.prepare(
-            "SELECT * FROM year_trivia WHERE year_ad = ?"
-        )
-            .bind(INITIAL_YEAR)
-            .all();
-
-        if (results && results.length > 0) {
-            const row: any = results[0];
-            initialData = {
-                era: getEra(INITIAL_YEAR),
-                trivia: {
-                    highlight_event: row.highlight_event,
-                    hit_song: row.hit_song,
-                },
-            };
+        const trivia = await getTrivia(c.env.DB, INITIAL_YEAR);
+        initialData = {
+            era: getEra(INITIAL_YEAR),
+            trivia: trivia as any,
+        };
+        // Fallback checks
+        if (!initialData.trivia.highlight_event) {
+            initialData.trivia = { highlight_event: "データなし", hit_song: "データなし" };
         }
     } catch (e) {
         console.error("DB Error:", e);
-        // Fallback if DB not ready
         initialData = { era: getEra(INITIAL_YEAR), trivia: { highlight_event: "DB Error", hit_song: "DB Error" } };
     }
 
     return c.html(
-        <Layout title="年号マスター">
-
+        <Layout title="年号マスター - 西暦和暦・年齢その場変換">
             <div class="flex-1 w-full relative overflow-y-auto bg-gradient-to-br from-blue-50 to-indigo-100">
-                <div class="min-h-full flex flex-col items-center justify-center p-4">
-                    <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 mb-8 drop-shadow-sm py-2 px-1">
-                        年号マスター
-                    </h1>
+                <div class="min-h-full flex flex-col items-center justify-start pt-8 pb-4 px-4">
 
-                    {/* Main Input Trigger */}
-                    {/* Main Input Triggers */}
+                    {/* Navigation to Hub */}
+                    <div class="mb-4 text-sm text-indigo-600 font-bold underline">
+                        <a href="/years">年表一覧から探す</a>
+                    </div>
+
                     {/* Main Input Triggers */}
                     <div class="w-full max-w-3xl mb-6 flex flex-col sm:flex-row gap-2 items-center">
                         {/* AD Trigger */}
@@ -95,7 +104,6 @@ app.get("/", async (c) => {
                     </div>
 
                     {/* Resume Calculator */}
-                    {/* Resume Calculator */}
                     <div class="w-full max-w-3xl bg-white/50 backdrop-blur-sm p-6 rounded-2xl border border-white/50 shadow-sm">
                         <h3 class="text-center font-bold text-gray-700 mb-2 flex items-center justify-center gap-2 text-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
@@ -127,7 +135,7 @@ app.get("/", async (c) => {
                         </div>
                     </div>
 
-                    {/* Modal AD */}
+                    {/* Modals and Scripts */}
                     <div id="modal-ad" class="fixed inset-0 z-50 hidden transition-all duration-300 opacity-0 bg-gray-900/60 backdrop-blur-sm flex flex-col items-center justify-end sm:justify-center">
                         <div class="w-full max-w-lg sm:max-w-2xl sm:min-w-[600px] bg-gray-50 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden transform transition-transform translate-y-full sm:translate-y-0 sm:scale-95 duration-300 h-[70vh] sm:h-[600px]" id="modal-content-ad">
                             <div class="p-4 bg-white border-b flex justify-between items-center z-50 shadow-md flex-shrink-0 relative">
@@ -137,12 +145,11 @@ app.get("/", async (c) => {
                                 </button>
                             </div>
                             <div class="flex-1 p-0 bg-gray-50 z-0 relative min-h-0 overflow-x-hidden">
-                                <DrumPicker mode="ad" id="picker-ad" startYear={START_YEAR} endYear={END_YEAR} initialYear={INITIAL_YEAR} />
+                                <DrumPicker mode="ad" id="picker-ad" startYear={1926} endYear={2026} initialYear={INITIAL_YEAR} />
                             </div>
                         </div>
                     </div>
 
-                    {/* Modal Era */}
                     <div id="modal-era" class="fixed inset-0 z-50 hidden transition-all duration-300 opacity-0 bg-gray-900/60 backdrop-blur-sm flex flex-col items-center justify-end sm:justify-center">
                         <div class="w-full max-w-lg sm:max-w-2xl sm:min-w-[600px] bg-gray-50 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden transform transition-transform translate-y-full sm:translate-y-0 sm:scale-95 duration-300 h-[70vh] sm:h-[600px]" id="modal-content-era">
                             <div class="p-4 bg-white border-b flex justify-between items-center z-50 shadow-md flex-shrink-0 relative">
@@ -152,7 +159,7 @@ app.get("/", async (c) => {
                                 </button>
                             </div>
                             <div class="flex-1 p-0 bg-gray-50 z-0 relative min-h-0 overflow-x-hidden">
-                                <DrumPicker mode="era" id="picker-era" startYear={START_YEAR} endYear={END_YEAR} initialYear={INITIAL_YEAR} />
+                                <DrumPicker mode="era" id="picker-era" startYear={1926} endYear={2026} initialYear={INITIAL_YEAR} />
                             </div>
                         </div>
                     </div>
@@ -193,29 +200,129 @@ app.get("/", async (c) => {
     );
 });
 
+// 2. Hub Page
+app.get("/years", (c) => {
+    return c.html(<YearIndex startYear={START_YEAR} endYear={END_YEAR} />);
+});
+
+// 3. Year Page
+app.get("/year/:year", async (c) => {
+    const year = parseInt(c.req.param("year"));
+    if (isNaN(year) || year < START_YEAR || year > END_YEAR) {
+        return c.redirect("/");
+    }
+
+    const era = getEra(year);
+    const trivia = await getTrivia(c.env.DB, year);
+
+    return c.html(
+        <YearPage
+            year={year}
+            currentYear={CURRENT_YEAR}
+            era={era}
+            trivia={trivia as any}
+        />
+    );
+});
+
+// 4. Age Page
+app.get("/age/:age", async (c) => {
+    const age = parseInt(c.req.param("age"));
+    if (isNaN(age) || age < 0 || age > 120) {
+        return c.redirect("/");
+    }
+
+    // Calculate birth year from age
+    const birthYear = CURRENT_YEAR - age;
+
+    // Check bounds
+    if (birthYear < START_YEAR || birthYear > END_YEAR) {
+        return c.redirect("/");
+    }
+
+    const era = getEra(birthYear);
+    const trivia = await getTrivia(c.env.DB, birthYear);
+
+    return c.html(
+        <YearPage
+            year={birthYear}
+            currentYear={CURRENT_YEAR}
+            era={era}
+            trivia={trivia as any}
+        />
+    );
+});
+
+// 5. Relative Pages
+app.get("/this-year", (c) => c.redirect(`/year/${CURRENT_YEAR}`));
+app.get("/next-year", (c) => c.redirect(`/year/${CURRENT_YEAR + 1}`));
+app.get("/last-year", (c) => c.redirect(`/year/${CURRENT_YEAR - 1}`));
+
+// 6. Sitemap
+app.get("/sitemap.xml", (c) => {
+    const baseUrl = new URL(c.req.url).origin;
+
+    let urls = "";
+
+    // Root
+    urls += `
+    <url>
+        <loc>${baseUrl}/</loc>
+        <priority>1.0</priority>
+        <changefreq>daily</changefreq>
+    </url>`;
+
+    // Hub
+    urls += `
+    <url>
+        <loc>${baseUrl}/years</loc>
+        <priority>0.8</priority>
+        <changefreq>weekly</changefreq>
+    </url>`;
+
+    // Years
+    for (let y = START_YEAR; y <= END_YEAR; y++) {
+        urls += `
+    <url>
+        <loc>${baseUrl}/year/${y}</loc>
+        <priority>0.7</priority>
+        <changefreq>monthly</changefreq>
+    </url>`;
+    }
+
+    // Ages
+    for (let age = 0; age <= 100; age++) {
+        urls += `
+    <url>
+        <loc>${baseUrl}/age/${age}</loc>
+        <priority>0.6</priority>
+        <changefreq>yearly</changefreq>
+    </url>`;
+    }
+
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>`;
+
+    return c.body(sitemap, 200, {
+        "Content-Type": "application/xml"
+    });
+});
+
+
 // API: Trivia
 app.get("/api/trivia/:year", async (c) => {
     const year = parseInt(c.req.param("year"));
     if (isNaN(year)) return c.json({ error: "Invalid year" }, 400);
 
     const era = getEra(year);
-    try {
-        const { results } = await c.env.DB.prepare(
-            "SELECT * FROM year_trivia WHERE year_ad = ?"
-        )
-            .bind(year)
-            .all();
-
-        const trivia = results[0] || {};
-        return c.json({
-            year,
-            era,
-            trivia,
-        });
-    } catch (e) {
-        console.error(e);
-        return c.json({ error: "Database error" }, 500);
-    }
+    const trivia = await getTrivia(c.env.DB, year);
+    return c.json({
+        year,
+        era,
+        trivia,
+    });
 });
 
 // API: Resume Calculation

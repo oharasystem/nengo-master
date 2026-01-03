@@ -85,6 +85,13 @@ export const Layout = (props: Props) => {
         </style>
       </head>
       <body class="bg-gray-100 text-gray-800 font-sans antialiased overflow-hidden h-screen w-screen flex flex-col">
+          <header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-100 h-14 flex-none">
+              <div class="h-full w-full max-w-4xl mx-auto px-4 flex items-center justify-center">
+                  <a href="/" class="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-80 transition flex items-center gap-2">
+                       年号マスター
+                  </a>
+              </div>
+          </header>
         ${props.children}
         <script>
             document.addEventListener('DOMContentLoaded', () => {
