@@ -14,14 +14,17 @@ Cloudflare Workers上でHonoを動作させるサーバーレス/エッジ構成
 - **Database:** Cloudflare D1 (SQLite) - Native Bindings
 - **UI/Styling:** Hono JSX (Server-Side Rendering) + TailwindCSS (CDN)
 - **Client Logic:** Vanilla TS/JS (Inlined in Layout for interactions)
+- **Node.js:** v20 (Required)
 
 ### ディレクトリ構成 (Monorepo / Hono Standard)
 
 ```text
 nengo-master/
+├── .nvmrc                # Node.js version config (v20)
 ├── wrangler.toml         # Cloudflare Workers 設定 (D1 Binding: DB)
 ├── package.json
-├── seed_data.sql         # D1 初期データ (Schema & Data)
+├── db/
+│   └── seed.sql          # D1 初期データ (Schema & Data)
 ├── src/
 │   ├── index.tsx         # Hono Entry Point & Routing
 │   ├── components/       # JSX Components (UI)
