@@ -1,5 +1,6 @@
+/** @jsxImportSource hono/jsx */
 import { Hono } from "hono";
-import { html } from "hono/html";
+import type { D1Database } from "@cloudflare/workers-types";
 import { Layout } from "./components/Layout";
 import { DrumPicker } from "./components/DrumPicker";
 import { TriviaCard } from "./components/TriviaCard";
@@ -12,6 +13,11 @@ type Bindings = {
     DB: D1Database;
 };
 
+type Trivia = {
+    highlight_event?: string;
+    hit_song?: string;
+};
+
 const app = new Hono<{ Bindings: Bindings }>();
 
 // Constants
@@ -21,14 +27,14 @@ const END_YEAR = 2100;   // Expanded to 2100 as per request
 const CURRENT_YEAR = new Date().getFullYear();
 
 // --- Helpers ---
-async function getTrivia(db: D1Database, year: number) {
+async function getTrivia(db: D1Database, year: number): Promise<Trivia> {
     try {
         const { results } = await db.prepare(
             "SELECT * FROM year_trivia WHERE year_ad = ?"
         )
             .bind(year)
             .all();
-        return results && results.length > 0 ? results[0] : {};
+        return (results && results.length > 0 ? results[0] : {}) as Trivia;
     } catch (e) {
         console.error("DB Error:", e);
         return {};
@@ -40,12 +46,12 @@ async function getTrivia(db: D1Database, year: number) {
 // 1. Top Page
 app.get("/", async (c) => {
     // Fetch initial trivia for SSR
-    let initialData = { era: "", trivia: {} };
+    let initialData: { era: string; trivia: Trivia } = { era: "", trivia: {} };
     try {
         const trivia = await getTrivia(c.env.DB, INITIAL_YEAR);
         initialData = {
             era: getEra(INITIAL_YEAR),
-            trivia: trivia as any,
+            trivia: trivia,
         };
         // Fallback checks
         if (!initialData.trivia.highlight_event) {
@@ -56,7 +62,7 @@ app.get("/", async (c) => {
         initialData = { era: getEra(INITIAL_YEAR), trivia: { highlight_event: "DB Error", hit_song: "DB Error" } };
     }
 
-    return c.html(
+    const content = (
         <Layout title="年号マスター - 西暦和暦・年齢その場変換">
             <div class="flex-1 w-full relative overflow-y-auto bg-gradient-to-br from-blue-50 to-indigo-100">
                 <div class="min-h-full flex flex-col items-center justify-start pt-8 pb-4 px-4">
@@ -198,11 +204,12 @@ app.get("/", async (c) => {
             </div>
         </Layout>
     );
+    return c.html(content.toString());
 });
 
 // 2. Hub Page
 app.get("/years", (c) => {
-    return c.html(<YearIndex startYear={START_YEAR} endYear={END_YEAR} />);
+    return c.html((<YearIndex startYear={START_YEAR} endYear={END_YEAR} />).toString());
 });
 
 // 3. Year Page
@@ -216,12 +223,12 @@ app.get("/year/:year", async (c) => {
     const trivia = await getTrivia(c.env.DB, year);
 
     return c.html(
-        <YearPage
+        (<YearPage
             year={year}
             currentYear={CURRENT_YEAR}
             era={era}
-            trivia={trivia as any}
-        />
+            trivia={trivia}
+        />).toString()
     );
 });
 
@@ -244,12 +251,12 @@ app.get("/age/:age", async (c) => {
     const trivia = await getTrivia(c.env.DB, birthYear);
 
     return c.html(
-        <YearPage
+        (<YearPage
             year={birthYear}
             currentYear={CURRENT_YEAR}
             era={era}
-            trivia={trivia as any}
-        />
+            trivia={trivia}
+        />).toString()
     );
 });
 

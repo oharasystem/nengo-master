@@ -1,4 +1,5 @@
 import { html } from "hono/html";
+import { Child } from "hono/jsx";
 
 type Props = {
     title: string;
@@ -6,7 +7,7 @@ type Props = {
     keywords?: string;
     url?: string;
     image?: string;
-    children: any;
+    children: Child;
 };
 
 export const Layout = (props: Props) => {
