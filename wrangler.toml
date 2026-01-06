@@ -6,4 +6,5 @@ main = "src/index.tsx"
 binding = "ASSETS"
 directory = "./src/public"
 
-
+[vars]
+ENVIRONMENT = "production"

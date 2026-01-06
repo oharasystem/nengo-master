@@ -16,10 +16,11 @@ type Props = {
     lang: string;
     dict: Translation;
     path: string;
+    env?: string;
 };
 
 export const YearPage = (props: Props) => {
-    const { year, currentYear, era, trivia, lang, dict, path } = props;
+    const { year, currentYear, era, trivia, lang, dict, path, env } = props;
     const age = currentYear - year;
     const zodiac = getZodiac(year);
     const yakudoshi = getYakudoshi(year, currentYear);
@@ -53,7 +54,7 @@ export const YearPage = (props: Props) => {
     const getLink = (p: string) => lang === 'ja' ? p : `/${lang}${p}`;
 
     return (
-        <Layout title={title} description={description} lang={lang} dict={dict} path={path}>
+        <Layout title={title} description={description} lang={lang} dict={dict} path={path} env={env}>
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
             <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">

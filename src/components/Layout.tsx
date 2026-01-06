@@ -12,12 +12,13 @@ type Props = {
     lang: string;
     dict: Translation;
     path: string;
+    env?: string;
 };
 
 const SUPPORTED_LANGS = ['ja', 'en', 'zh', 'vi'];
 
 export const Layout = (props: Props) => {
-    const { lang, dict, path } = props;
+    const { lang, dict, path, env } = props;
 
     // Helper to generate alternate links
     // path comes as e.g. "/year/2024" or "/"
@@ -74,6 +75,18 @@ export const Layout = (props: Props) => {
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="robots" content="index, follow" />
+
+        ${env === 'production' ? html`
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-FCLQYQQWP4"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-FCLQYQQWP4');
+        </script>
+        ` : ''}
 
         ${hreflangs}
 
