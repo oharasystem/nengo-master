@@ -1,10 +1,27 @@
+// Refactored Client JS to use window.AppConfig
+const config = window.AppConfig || {};
+const labels = config.labels || {
+    form_year_suffix: '年'
+};
+const triviaLabels = config.trivia || {
+    events_title: 'その年の出来事',
+    songs_title: 'その年のヒット曲',
+    empty: '---'
+};
+const resumeLabels = config.resume || {
+    error_input: "エラー: ",
+    error_calc: "計算に失敗しました。通信環境を確認してください。",
+    result_year_suffix: "年",
+    result_month_suffix: "月"
+};
+
 function calculateResume() {
     const year = document.getElementById('birthYear').value;
     const isEarly = document.getElementById('earlyBirthday').checked;
 
     if (!year) return;
 
-    // 早生まれなら1月1日(前年度扱い)、そうでなければ5月1日(今年度扱い)として計算
+    // Early Bird: 01-01 (treated as previous school year), Normal: 05-01 (current school year)
     const month = isEarly ? '01' : '05';
     // Use strictly formatted string
     const birthDate = year + '-' + month + '-01';
@@ -19,21 +36,21 @@ function calculateResume() {
         list.innerHTML = '';
 
         if (data.error) {
-            alert("エラー: " + data.error);
+            alert(resumeLabels.error_input + data.error);
             return;
         }
 
         data.forEach(item => {
             const li = document.createElement('li');
             li.className = 'flex justify-between border-b border-slate-100 pb-2 last:border-0';
-            li.innerHTML = `<span class="font-bold text-slate-600">${item.label}</span> <span class="text-[#22215B] font-mono">${item.year}年${item.month}月</span>`;
+            li.innerHTML = `<span class="font-bold text-slate-600">${item.label}</span> <span class="text-[#22215B] font-mono">${item.year}${resumeLabels.result_year_suffix}${item.month}${resumeLabels.result_month_suffix}</span>`;
             list.appendChild(li);
         });
         document.getElementById('resume-result').classList.remove('hidden');
     })
     .catch(err => {
         console.error("Network or parsing error", err);
-        alert("計算に失敗しました。通信環境を確認してください。");
+        alert(resumeLabels.error_calc);
     });
 }
 
@@ -50,8 +67,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial Year
     const adTextEl = document.getElementById('display-ad');
     if (adTextEl) {
+        // Retrieve raw year if possible, but currently we parse text.
+        // The HTML should ideally output just the number or we parse efficiently.
+        // To be safe against "Year 1989" or "1989年", we extract digits.
         const adText = adTextEl.textContent;
-        currentYear = parseInt(adText.replace('年', '')) || 1989;
+        const match = adText.match(/\d+/);
+        if (match) {
+            currentYear = parseInt(match[0]);
+        }
     }
 
     // Modals
@@ -234,7 +257,7 @@ function updateAll(year) {
             // Update Displays
             const adEl = document.getElementById('display-ad');
             const eraEl = document.getElementById('display-era');
-            if (adEl) adEl.textContent = data.year + '年';
+            if (adEl) adEl.textContent = data.year + labels.form_year_suffix;
             if (eraEl) eraEl.textContent = data.era;
 
             // Update Trivia Container
@@ -255,7 +278,7 @@ function renderTrivia(trivia) {
       <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6 transition-all hover:shadow-md">
         <div class="flex items-center gap-2 mb-4">
             <span class="bg-teal-100 text-teal-600 p-2 rounded-full h-10 w-10 flex items-center justify-center text-xl">📅</span>
-            <h3 class="font-bold text-xl text-slate-800">その年の出来事</h3>
+            <h3 class="font-bold text-xl text-slate-800">${triviaLabels.events_title}</h3>
         </div>
         <ul class="text-left text-slate-700 list-disc list-inside space-y-2 ml-1">
           ${eventsHtml}
@@ -265,7 +288,7 @@ function renderTrivia(trivia) {
       <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md">
         <div class="flex items-center gap-2 mb-4">
             <span class="bg-pink-100 text-pink-600 p-2 rounded-full h-10 w-10 flex items-center justify-center text-xl">🎵</span>
-            <h3 class="font-bold text-xl text-slate-800">その年のヒット曲</h3>
+            <h3 class="font-bold text-xl text-slate-800">${triviaLabels.songs_title}</h3>
         </div>
         <ul class="text-left text-slate-700 list-disc list-inside space-y-2 ml-1">
           ${songsHtml}
@@ -276,7 +299,7 @@ function renderTrivia(trivia) {
 
 function createListHtml(items) {
     if (!items || items.length === 0) {
-        return '<li class="list-none text-slate-400">---</li>';
+        return `<li class="list-none text-slate-400">${triviaLabels.empty}</li>`;
     }
     return items.map(item => `<li>${item}</li>`).join('');
 }

@@ -1,13 +1,17 @@
 import { Layout } from "./Layout";
 import { getZodiac } from "../utils/zodiac";
 import { getEra } from "../utils/era";
+import { Translation } from "../locales/types";
 
 type Props = {
     startYear: number;
     endYear: number;
+    lang: string;
+    dict: Translation;
+    path: string;
 };
 
-export const YearIndex = ({ startYear, endYear }: Props) => {
+export const YearIndex = ({ startYear, endYear, lang, dict, path }: Props) => {
     const currentYear = new Date().getFullYear();
     const nextYear = currentYear + 1;
     const lastYear = currentYear - 1;
@@ -40,16 +44,19 @@ export const YearIndex = ({ startYear, endYear }: Props) => {
         }
     }
 
+    // Helper
+    const getLink = (p: string) => lang === 'ja' ? p : `/${lang}${p}`;
+
     const YearGrid = ({ years }: { years: number[] }) => {
-        if (years.length === 0) return <div class="text-slate-400 text-sm">該当する年がありません</div>;
+        if (years.length === 0) return <div class="text-slate-400 text-sm">{dict.trivia.empty}</div>;
         return (
             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
                 {years.map(year => {
                     const era = getEra(year);
                     const zodiac = getZodiac(year);
                     return (
-                        <a href={`/year/${year}`} class="block bg-white p-2 sm:p-3 rounded-lg shadow-sm border border-slate-100 hover:border-[#22215B] hover:shadow-md transition text-center group">
-                            <div class="text-base sm:text-lg font-bold text-[#22215B] group-hover:opacity-80">{year}年</div>
+                        <a href={getLink(`/year/${year}`)} class="block bg-white p-2 sm:p-3 rounded-lg shadow-sm border border-slate-100 hover:border-[#22215B] hover:shadow-md transition text-center group">
+                            <div class="text-base sm:text-lg font-bold text-[#22215B] group-hover:opacity-80">{year}{dict.home.form_year_suffix}</div>
                             <div class="text-[10px] sm:text-xs text-slate-500 mb-1 truncate">{era}</div>
                             <div class="text-[10px] sm:text-xs bg-slate-100 rounded px-1 py-0.5 inline-block text-slate-600">
                                 {zodiac.jyunishi.emoji} {zodiac.kanji}
@@ -62,34 +69,33 @@ export const YearIndex = ({ startYear, endYear }: Props) => {
     };
 
     return (
-        <Layout title="年号・西暦・年齢早見表一覧" description="1900年から2100年までの各年の年齢、干支、厄年、出来事がわかる一覧ページです。">
+        <Layout title={dict.meta.title} description={dict.meta.description} lang={lang} dict={dict} path={path}>
             <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">
                 <div class="w-full max-w-5xl mx-auto p-4 flex flex-col gap-8 pb-16">
 
                     <header class="text-center pt-4">
-                        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800">年号・西暦一覧</h1>
-                        <p class="text-sm text-slate-500 mt-2">調べたい年を選択してください</p>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800">{dict.nav.hub}</h1>
                     </header>
 
                     {/* Hero: Quick Access */}
                     <section class="max-w-3xl mx-auto w-full">
                         <div class="grid grid-cols-3 gap-4">
-                            <a href={`/year/${lastYear}`} class="flex flex-col items-center justify-center bg-white p-4 rounded-xl shadow border border-slate-200 hover:border-[#22215B] hover:bg-slate-50 transition">
-                                <span class="text-xs font-bold text-slate-500 mb-1">去年</span>
-                                <span class="text-xl font-bold text-slate-800">{lastYear}年</span>
+                            <a href={getLink(`/year/${lastYear}`)} class="flex flex-col items-center justify-center bg-white p-4 rounded-xl shadow border border-slate-200 hover:border-[#22215B] hover:bg-slate-50 transition">
+                                <span class="text-xs font-bold text-slate-500 mb-1">{lastYear}</span>
+                                <span class="text-xl font-bold text-slate-800">{lastYear}{dict.home.form_year_suffix}</span>
                             </a>
-                            <a href={`/year/${currentYear}`} class="flex flex-col items-center justify-center bg-[#22215B] text-white p-4 rounded-xl shadow-lg ring-4 ring-[#22215B]/20 hover:opacity-90 transition transform hover:-translate-y-1">
-                                <span class="text-xs font-bold text-slate-100 mb-1">今年</span>
-                                <span class="text-2xl font-extrabold">{currentYear}年</span>
+                            <a href={getLink(`/year/${currentYear}`)} class="flex flex-col items-center justify-center bg-[#22215B] text-white p-4 rounded-xl shadow-lg ring-4 ring-[#22215B]/20 hover:opacity-90 transition transform hover:-translate-y-1">
+                                <span class="text-xs font-bold text-slate-100 mb-1">{currentYear}</span>
+                                <span class="text-2xl font-extrabold">{currentYear}{dict.home.form_year_suffix}</span>
                             </a>
-                            <a href={`/year/${nextYear}`} class="flex flex-col items-center justify-center bg-white p-4 rounded-xl shadow border border-slate-200 hover:border-[#22215B] hover:bg-slate-50 transition">
-                                <span class="text-xs font-bold text-slate-500 mb-1">来年</span>
-                                <span class="text-xl font-bold text-slate-800">{nextYear}年</span>
+                            <a href={getLink(`/year/${nextYear}`)} class="flex flex-col items-center justify-center bg-white p-4 rounded-xl shadow border border-slate-200 hover:border-[#22215B] hover:bg-slate-50 transition">
+                                <span class="text-xs font-bold text-slate-500 mb-1">{nextYear}</span>
+                                <span class="text-xl font-bold text-slate-800">{nextYear}{dict.home.form_year_suffix}</span>
                             </a>
                         </div>
                     </section>
 
-                    {/* Main Area: Eras */}
+                    {/* Main Area: Eras - Keeping Headers in Japanese for now as Era names are Japanese concepts */}
                     <div class="space-y-8">
                         {/* Reiwa */}
                         <section>

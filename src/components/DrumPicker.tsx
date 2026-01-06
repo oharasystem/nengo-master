@@ -1,5 +1,6 @@
 import { html } from "hono/html";
 import { getEra } from "../utils/era";
+import { Translation } from "../locales/types";
 
 type DrumPickerProps = {
   mode: 'ad' | 'era';
@@ -7,6 +8,8 @@ type DrumPickerProps = {
   startYear: number;
   endYear: number;
   initialYear: number;
+  lang?: string;
+  dict?: Translation;
 };
 
 export const DrumPicker = (props: DrumPickerProps) => {
@@ -14,6 +17,8 @@ export const DrumPicker = (props: DrumPickerProps) => {
   for (let y = props.startYear; y <= props.endYear; y++) {
     years.push(y);
   }
+
+  const suffix = props.dict?.home.form_year_suffix || '年';
 
   return html`
     <div class="relative h-full w-full bg-white/30 backdrop-blur-md rounded-xl border border-white/50 shadow-inner group overflow-hidden">
@@ -36,7 +41,7 @@ export const DrumPicker = (props: DrumPickerProps) => {
             class="year-item h-16 flex items-center justify-center text-2xl font-bold snap-center snap-always transition-all duration-300 transform text-slate-400 opacity-50"
             data-year="${y}"
           >
-            ${props.mode === 'ad' ? `${y}年` : getEra(y)}
+            ${props.mode === 'ad' ? `${y}${suffix}` : getEra(y)}
           </div>
         `)}
       </div>
