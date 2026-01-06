@@ -25,8 +25,8 @@ function calculateResume() {
 
         data.forEach(item => {
             const li = document.createElement('li');
-            li.className = 'flex justify-between border-b border-gray-100 pb-2 last:border-0';
-            li.innerHTML = `<span class="font-bold text-gray-600">${item.label}</span> <span class="text-indigo-600 font-mono">${item.year}年${item.month}月</span>`;
+            li.className = 'flex justify-between border-b border-slate-100 pb-2 last:border-0';
+            li.innerHTML = `<span class="font-bold text-slate-600">${item.label}</span> <span class="text-[#22215B] font-mono">${item.year}年${item.month}月</span>`;
             list.appendChild(li);
         });
         document.getElementById('resume-result').classList.remove('hidden');

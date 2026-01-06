@@ -26,7 +26,7 @@ export const Layout = (props: Props) => {
         <meta name="description" content="${description}" />
         <meta name="keywords" content="${keywords}" />
         <meta name="author" content="Nengo Master" />
-        <meta name="theme-color" content="#4f46e5" />
+        <meta name="theme-color" content="#22215B" />
         <link rel="canonical" href="${url}" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -85,10 +85,10 @@ export const Layout = (props: Props) => {
           }
         </style>
       </head>
-      <body class="bg-gray-100 text-gray-800 font-sans antialiased overflow-hidden h-screen w-screen flex flex-col">
-          <header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-100 h-14 flex-none">
+      <body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-hidden h-screen w-screen flex flex-col">
+          <header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 h-14 flex-none">
               <div class="h-full w-full max-w-4xl mx-auto px-4 flex items-center justify-center">
-                  <a href="/" class="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-80 transition flex items-center gap-2">
+                  <a href="/" class="text-xl font-extrabold text-[#22215B] hover:opacity-80 transition flex items-center gap-2">
                        年号マスター
                   </a>
               </div>
@@ -166,12 +166,12 @@ export const Layout = (props: Props) => {
                 
                 const updateActiveStyle = (container, activeItem) => {
                     container.querySelectorAll('.year-item').forEach(item => {
-                        item.classList.remove('text-indigo-600', 'scale-125', 'opacity-100');
-                        item.classList.add('text-gray-400', 'scale-100', 'opacity-50');
+                        item.classList.remove('text-[#22215B]', 'scale-125', 'opacity-100');
+                        item.classList.add('text-slate-400', 'scale-100', 'opacity-50');
                     });
                     if (activeItem) {
-                        activeItem.classList.remove('text-gray-400', 'scale-100', 'opacity-50');
-                        activeItem.classList.add('text-indigo-600', 'scale-125', 'opacity-100');
+                        activeItem.classList.remove('text-slate-400', 'scale-100', 'opacity-50');
+                        activeItem.classList.add('text-[#22215B]', 'scale-125', 'opacity-100');
                     }
                 };
 
@@ -244,13 +244,13 @@ export const Layout = (props: Props) => {
                                         const triviaContainer = document.getElementById('trivia-container');
                                         if (triviaContainer) {
                                             triviaContainer.innerHTML = \`
-                                                <div class="bg-white p-4 rounded-lg shadow mb-4">
-                                                    <h3 class="font-bold text-gray-500 text-sm mb-1">その年の出来事</h3>
-                                                    <p class="text-lg">\${data.trivia.highlight_event || '特になし'}</p>
+                                                <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mb-4">
+                                                    <h3 class="font-bold text-slate-500 text-sm mb-1">その年の出来事</h3>
+                                                    <p class="text-lg text-slate-800">\${data.trivia.highlight_event || '特になし'}</p>
                                                 </div>
-                                                <div class="bg-white p-4 rounded-lg shadow">
-                                                    <h3 class="font-bold text-gray-500 text-sm mb-1">その年のヒット曲</h3>
-                                                    <p class="text-lg">\${data.trivia.hit_song || '情報なし'}</p>
+                                                <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                                                    <h3 class="font-bold text-slate-500 text-sm mb-1">その年のヒット曲</h3>
+                                                    <p class="text-lg text-slate-800">\${data.trivia.hit_song || '情報なし'}</p>
                                                 </div>
                                             \`;
                                         }

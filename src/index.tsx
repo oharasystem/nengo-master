@@ -64,40 +64,40 @@ app.get("/", async (c) => {
 
     const content = (
         <Layout title="年号マスター - 西暦和暦・年齢その場変換">
-            <div class="flex-1 w-full relative overflow-y-auto bg-gradient-to-br from-blue-50 to-indigo-100">
+            <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">
                 <div class="min-h-full flex flex-col items-center justify-start pt-8 pb-4 px-4">
 
                     {/* Navigation to Hub */}
-                    <div class="mb-4 text-sm text-indigo-600 font-bold underline">
+                    <div class="mb-4 text-sm text-[#22215B] font-bold underline hover:opacity-80">
                         <a href="/years">年表一覧から探す</a>
                     </div>
 
                     {/* Main Input Triggers */}
                     <div class="w-full max-w-3xl mb-6 flex flex-col sm:flex-row gap-2 items-center">
                         {/* AD Trigger */}
-                        <div id="trigger-ad" class="flex-1 w-full sm:w-auto min-w-[240px] bg-white p-4 rounded-xl shadow-md border-2 border-indigo-50 cursor-pointer hover:border-indigo-400 transition-all active:scale-95 group relative overflow-hidden">
-                            <label class="block text-xs font-bold text-gray-400 mb-1">西暦</label>
+                        <div id="trigger-ad" class="flex-1 w-full sm:w-auto min-w-[240px] bg-white p-4 rounded-lg shadow-sm border border-slate-200 cursor-pointer hover:border-[#22215B] hover:shadow-md transition-all active:scale-95 group relative overflow-hidden">
+                            <label class="block text-xs font-bold text-slate-400 mb-1">西暦</label>
                             <div class="flex justify-between items-end">
-                                <div id="display-ad" class="text-2xl font-bold text-gray-800">{INITIAL_YEAR}年</div>
-                                <div class="text-indigo-300 group-hover:text-indigo-500 mb-1">
+                                <div id="display-ad" class="text-2xl font-bold text-slate-800">{INITIAL_YEAR}年</div>
+                                <div class="text-slate-300 group-hover:text-[#22215B] mb-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                                 </div>
                             </div>
                         </div>
 
                         {/* Converter Icon */}
-                        <div class="text-indigo-200 flex-shrink-0 animate-pulse rotate-90 sm:rotate-0">
+                        <div class="text-slate-300 flex-shrink-0 animate-pulse rotate-90 sm:rotate-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                             </svg>
                         </div>
 
                         {/* Era Trigger */}
-                        <div id="trigger-era" class="flex-1 w-full sm:w-auto min-w-[240px] bg-white p-4 rounded-xl shadow-md border-2 border-orange-50 cursor-pointer hover:border-orange-400 transition-all active:scale-95 group relative overflow-hidden">
-                            <label class="block text-xs font-bold text-gray-400 mb-1">和暦</label>
+                        <div id="trigger-era" class="flex-1 w-full sm:w-auto min-w-[240px] bg-white p-4 rounded-lg shadow-sm border border-slate-200 cursor-pointer hover:border-[#22215B] hover:shadow-md transition-all active:scale-95 group relative overflow-hidden">
+                            <label class="block text-xs font-bold text-slate-400 mb-1">和暦</label>
                             <div class="flex justify-between items-end">
-                                <div id="display-era" class="text-xl font-bold text-gray-800">{initialData.era}</div>
-                                <div class="text-orange-300 group-hover:text-orange-500 mb-1">
+                                <div id="display-era" class="text-xl font-bold text-slate-800">{initialData.era}</div>
+                                <div class="text-slate-300 group-hover:text-[#22215B] mb-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                                 </div>
                             </div>
@@ -110,43 +110,43 @@ app.get("/", async (c) => {
                     </div>
 
                     {/* Resume Calculator */}
-                    <div class="w-full max-w-3xl bg-white/50 backdrop-blur-sm p-6 rounded-2xl border border-white/50 shadow-sm">
-                        <h3 class="text-center font-bold text-gray-700 mb-2 flex items-center justify-center gap-2 text-lg">
+                    <div class="w-full max-w-3xl bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                        <h3 class="text-center font-bold text-slate-700 mb-2 flex items-center justify-center gap-2 text-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                             入学・卒業年度 自動計算
                         </h3>
-                        <p class="text-xs text-center text-gray-500 mb-4">生まれ年を入力すると、入学・卒業年度を自動で計算します。</p>
+                        <p class="text-xs text-center text-slate-500 mb-4">生まれ年を入力すると、入学・卒業年度を自動で計算します。</p>
                         <form class="flex flex-col gap-3" onsubmit="event.preventDefault(); calculateResume();">
                             <div class="flex gap-4">
                                 <div class="flex-1">
-                                    <label for="birthYear" class="block text-xs font-bold text-gray-400 mb-1 pl-1">生まれ年 (西暦)</label>
+                                    <label for="birthYear" class="block text-xs font-bold text-slate-400 mb-1 pl-1">生まれ年 (西暦)</label>
                                     <div class="flex items-center gap-2">
-                                        <input type="number" id="birthYear" placeholder="2000" class="w-full p-3 border rounded-lg shadow-inner focus:ring-2 focus:ring-indigo-400 focus:outline-none transition bg-white" required min="1900" max="2100" />
-                                        <span class="text-gray-500 font-bold whitespace-nowrap">年</span>
+                                        <input type="number" id="birthYear" placeholder="2000" class="w-full p-3 border border-slate-300 rounded-lg shadow-inner focus:ring-2 focus:ring-[#22215B] focus:border-[#22215B] focus:outline-none transition bg-white" required min="1900" max="2100" />
+                                        <span class="text-slate-500 font-bold whitespace-nowrap">年</span>
                                     </div>
                                 </div>
                                 <div class="flex-none flex items-end pb-1">
-                                    <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-3 rounded-lg border border-gray-200 shadow-sm hover:bg-gray-50 transition select-none h-[50px]">
-                                        <input type="checkbox" id="earlyBirthday" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300" />
-                                        <span class="text-sm font-bold text-gray-700">早生まれ <span class="text-xs text-gray-400 font-normal">(1/1〜4/1)</span></span>
+                                    <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-3 rounded-lg border border-slate-200 shadow-sm hover:bg-slate-50 transition select-none h-[50px]">
+                                        <input type="checkbox" id="earlyBirthday" class="w-5 h-5 text-[#22215B] rounded focus:ring-[#22215B] border-slate-300" />
+                                        <span class="text-sm font-bold text-slate-700">早生まれ <span class="text-xs text-slate-400 font-normal">(1/1〜4/1)</span></span>
                                     </label>
                                 </div>
                             </div>
-                            <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg hover:bg-indigo-700 active:transform active:scale-95 transition shadow-indigo-200 shadow-lg">
+                            <button type="submit" class="w-full bg-[#22215B] text-white font-bold py-3 rounded-lg hover:opacity-90 active:transform active:scale-95 transition shadow-lg">
                                 計算する
                             </button>
                         </form>
-                        <div id="resume-result" class="mt-4 hidden bg-white p-4 rounded-lg shadow border border-gray-100">
+                        <div id="resume-result" class="mt-4 hidden bg-white p-4 rounded-lg shadow border border-slate-100">
                             <ul class="text-left text-sm space-y-2" id="resume-list"></ul>
                         </div>
                     </div>
 
                     {/* Modals and Scripts */}
-                    <div id="modal-ad" class="fixed inset-0 z-50 hidden transition-all duration-300 opacity-0 bg-gray-900/60 backdrop-blur-sm flex flex-col items-center justify-end sm:justify-center">
-                        <div class="w-full max-w-lg sm:max-w-2xl sm:min-w-[600px] bg-gray-50 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden transform transition-transform translate-y-full sm:translate-y-0 sm:scale-95 duration-300 h-[70vh] sm:h-[600px]" id="modal-content-ad">
-                            <div class="p-4 bg-white border-b flex justify-between items-center z-50 shadow-md flex-shrink-0 relative">
-                                <h2 class="font-bold text-gray-700">西暦を選択</h2>
-                                <button id="close-ad" class="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition text-gray-600">
+                    <div id="modal-ad" class="fixed inset-0 z-50 hidden transition-all duration-300 opacity-0 bg-slate-900/60 backdrop-blur-sm flex flex-col items-center justify-end sm:justify-center">
+                        <div class="w-full max-w-lg sm:max-w-2xl sm:min-w-[600px] bg-slate-50 rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden transform transition-transform translate-y-full sm:translate-y-0 sm:scale-95 duration-300 h-[70vh] sm:h-[600px]" id="modal-content-ad">
+                            <div class="p-4 bg-white border-b border-slate-200 flex justify-between items-center z-50 shadow-sm flex-shrink-0 relative">
+                                <h2 class="font-bold text-slate-700">西暦を選択</h2>
+                                <button id="close-ad" class="p-2 bg-slate-100 rounded-full hover:bg-slate-200 transition text-slate-600">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
@@ -156,15 +156,15 @@ app.get("/", async (c) => {
                         </div>
                     </div>
 
-                    <div id="modal-era" class="fixed inset-0 z-50 hidden transition-all duration-300 opacity-0 bg-gray-900/60 backdrop-blur-sm flex flex-col items-center justify-end sm:justify-center">
-                        <div class="w-full max-w-lg sm:max-w-2xl sm:min-w-[600px] bg-gray-50 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden transform transition-transform translate-y-full sm:translate-y-0 sm:scale-95 duration-300 h-[70vh] sm:h-[600px]" id="modal-content-era">
-                            <div class="p-4 bg-white border-b flex justify-between items-center z-50 shadow-md flex-shrink-0 relative">
-                                <h2 class="font-bold text-gray-700">和暦を選択</h2>
-                                <button id="close-era" class="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition text-gray-600">
+                    <div id="modal-era" class="fixed inset-0 z-50 hidden transition-all duration-300 opacity-0 bg-slate-900/60 backdrop-blur-sm flex flex-col items-center justify-end sm:justify-center">
+                        <div class="w-full max-w-lg sm:max-w-2xl sm:min-w-[600px] bg-slate-50 rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden transform transition-transform translate-y-full sm:translate-y-0 sm:scale-95 duration-300 h-[70vh] sm:h-[600px]" id="modal-content-era">
+                            <div class="p-4 bg-white border-b border-slate-200 flex justify-between items-center z-50 shadow-sm flex-shrink-0 relative">
+                                <h2 class="font-bold text-slate-700">和暦を選択</h2>
+                                <button id="close-era" class="p-2 bg-slate-100 rounded-full hover:bg-slate-200 transition text-slate-600">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
-                            <div class="flex-1 p-0 bg-gray-50 z-0 relative min-h-0 overflow-x-hidden">
+                            <div class="flex-1 p-0 bg-slate-50 z-0 relative min-h-0 overflow-x-hidden">
                                 <DrumPicker mode="era" id="picker-era" startYear={1926} endYear={2026} initialYear={INITIAL_YEAR} />
                             </div>
                         </div>

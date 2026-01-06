@@ -49,77 +49,77 @@ export const YearPage = (props: Props) => {
         <Layout title={title} description={description}>
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-            <div class="flex-1 w-full relative overflow-y-auto bg-gray-50">
+            <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">
                 <div class="w-full max-w-4xl mx-auto p-4 flex flex-col gap-8">
                     {/* Header */}
                     <header class="text-center py-8">
-                        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-2">
-                            <span class="text-indigo-600">{year}年</span>
-                            <span class="text-lg sm:text-2xl font-normal text-gray-600 ml-2">({era})</span>
+                        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-2">
+                            <span class="text-[#22215B]">{year}年</span>
+                            <span class="text-lg sm:text-2xl font-normal text-slate-600 ml-2">({era})</span>
                         </h1>
-                        <p class="text-lg font-bold text-gray-700 mb-2">
+                        <p class="text-lg font-bold text-slate-700 mb-2">
                             生まれの方の年齢
                         </p>
-                        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 text-gray-700 font-bold mb-4">
-                            <div class="bg-indigo-50 px-4 py-2 rounded-lg">
-                                <span class="text-sm text-gray-500 block">誕生日前</span>
-                                <span class="text-2xl text-indigo-600">{age - 1}</span> 歳
+                        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 text-slate-700 font-bold mb-4">
+                            <div class="bg-slate-100 px-4 py-2 rounded-lg">
+                                <span class="text-sm text-slate-500 block">誕生日前</span>
+                                <span class="text-2xl text-[#22215B]">{age - 1}</span> 歳
                             </div>
-                            <div class="hidden sm:block text-gray-300">|</div>
-                            <div class="bg-indigo-50 px-4 py-2 rounded-lg">
-                                <span class="text-sm text-gray-500 block">誕生日後</span>
-                                <span class="text-2xl text-indigo-600">{age}</span> 歳
+                            <div class="hidden sm:block text-slate-300">|</div>
+                            <div class="bg-slate-100 px-4 py-2 rounded-lg">
+                                <span class="text-sm text-slate-500 block">誕生日後</span>
+                                <span class="text-2xl text-[#22215B]">{age}</span> 歳
                             </div>
                         </div>
-                        <div class="mt-2 text-gray-500 font-bold">
-                            干支: <span class="text-gray-800">{zodiac.kanji} ({zodiac.jyunishi.kana})</span> {zodiac.jyunishi.emoji}
+                        <div class="mt-2 text-slate-500 font-bold">
+                            干支: <span class="text-slate-800">{zodiac.kanji} ({zodiac.jyunishi.kana})</span> {zodiac.jyunishi.emoji}
                         </div>
                     </header>
 
                     {/* Navigation (Top) */}
-                    <nav class="flex justify-between text-sm sm:text-base font-bold text-indigo-600">
+                    <nav class="flex justify-between text-sm sm:text-base font-bold text-[#22215B]">
                         <a href={`/year/${prevYear}`} class="hover:underline">← {prevYear}年</a>
                         <a href="/years" class="hover:underline">年表一覧</a>
                         <a href={`/year/${nextYear}`} class="hover:underline">{nextYear}年 →</a>
                     </nav>
 
                     {/* Yakudoshi Check */}
-                    <section class="bg-white p-6 rounded-2xl shadow-sm border border-orange-100">
+                    <section class="bg-white p-6 rounded-xl shadow-sm border border-orange-100">
                         <div class="flex items-center gap-2 mb-4">
                             <span class="bg-orange-100 text-orange-600 p-2 rounded-full">⚡</span>
-                            <h2 class="font-bold text-xl text-gray-800">今年の厄年チェック <span class="text-sm font-normal text-gray-500">（数え年）</span></h2>
+                            <h2 class="font-bold text-xl text-slate-800">今年の厄年チェック <span class="text-sm font-normal text-slate-500">（数え年）</span></h2>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Male */}
-                            <div class={`p-4 rounded-xl border-2 ${yakudoshi.male ? 'border-red-400 bg-red-50' : 'border-gray-100 bg-gray-50'}`}>
-                                <h3 class="font-bold text-center text-gray-700 mb-2">男性</h3>
+                            <div class={`p-4 rounded-lg border-2 ${yakudoshi.male ? 'border-red-400 bg-red-50' : 'border-slate-100 bg-slate-50'}`}>
+                                <h3 class="font-bold text-center text-slate-700 mb-2">男性</h3>
                                 {yakudoshi.male ? (
                                     <div class="text-center">
                                         <div class="text-2xl font-extrabold text-red-600 mb-1">{yakudoshi.male.label}</div>
-                                        <div class="text-sm text-gray-600">数え年: {yakudoshi.male.age}歳</div>
+                                        <div class="text-sm text-slate-600">数え年: {yakudoshi.male.age}歳</div>
                                         <div class="text-xs text-red-500 font-bold mt-2">ご注意ください</div>
                                     </div>
                                 ) : (
-                                    <div class="text-center py-4 text-gray-400 font-bold">厄年ではありません</div>
+                                    <div class="text-center py-4 text-slate-400 font-bold">厄年ではありません</div>
                                 )}
                             </div>
 
                             {/* Female */}
-                            <div class={`p-4 rounded-xl border-2 ${yakudoshi.female ? 'border-red-400 bg-red-50' : 'border-gray-100 bg-gray-50'}`}>
-                                <h3 class="font-bold text-center text-gray-700 mb-2">女性</h3>
+                            <div class={`p-4 rounded-lg border-2 ${yakudoshi.female ? 'border-red-400 bg-red-50' : 'border-slate-100 bg-slate-50'}`}>
+                                <h3 class="font-bold text-center text-slate-700 mb-2">女性</h3>
                                 {yakudoshi.female ? (
                                     <div class="text-center">
                                         <div class="text-2xl font-extrabold text-red-600 mb-1">{yakudoshi.female.label}</div>
-                                        <div class="text-sm text-gray-600">数え年: {yakudoshi.female.age}歳</div>
+                                        <div class="text-sm text-slate-600">数え年: {yakudoshi.female.age}歳</div>
                                         <div class="text-xs text-red-500 font-bold mt-2">ご注意ください</div>
                                     </div>
                                 ) : (
-                                    <div class="text-center py-4 text-gray-400 font-bold">厄年ではありません</div>
+                                    <div class="text-center py-4 text-slate-400 font-bold">厄年ではありません</div>
                                 )}
                             </div>
                         </div>
-                        <p class="text-xs text-gray-400 mt-4 text-center">※厄年は「数え年（生まれた時を1歳とし、元旦に加齢）」で計算しています。</p>
+                        <p class="text-xs text-slate-400 mt-4 text-center">※厄年は「数え年（生まれた時を1歳とし、元旦に加齢）」で計算しています。</p>
                     </section>
 
                     {/* Trivia */}
@@ -128,23 +128,23 @@ export const YearPage = (props: Props) => {
                     </section>
 
                     {/* Resume (School History) */}
-                    <section class="bg-white p-6 rounded-2xl shadow-sm border border-indigo-50">
+                    <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                             <div class="flex items-center gap-2">
-                                <span class="bg-indigo-100 text-indigo-600 p-2 rounded-full">🎓</span>
-                                <h2 class="font-bold text-xl text-gray-800">入学・卒業年度早見表 <span class="text-sm font-normal text-gray-500">（ストレート合格の場合）</span></h2>
+                                <span class="bg-slate-100 text-[#22215B] p-2 rounded-full">🎓</span>
+                                <h2 class="font-bold text-xl text-slate-800">入学・卒業年度早見表 <span class="text-sm font-normal text-slate-500">（ストレート合格の場合）</span></h2>
                             </div>
 
                             {/* Early Birthday Toggle */}
-                            <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border border-gray-200 shadow-sm hover:bg-gray-50 transition select-none">
-                                <input type="checkbox" id="earlyBirthdayToggle" class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300" />
-                                <span class="text-sm font-bold text-gray-700">早生まれ <span class="text-xs text-gray-400 font-normal">(1/1〜4/1)</span></span>
+                            <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border border-slate-200 shadow-sm hover:bg-slate-50 transition select-none">
+                                <input type="checkbox" id="earlyBirthdayToggle" class="w-4 h-4 text-[#22215B] rounded focus:ring-[#22215B] border-slate-300" />
+                                <span class="text-sm font-bold text-slate-700">早生まれ <span class="text-xs text-slate-400 font-normal">(1/1〜4/1)</span></span>
                             </label>
                         </div>
 
                         <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left text-gray-600" id="resumeTable">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <table class="w-full text-sm text-left text-slate-600" id="resumeTable">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-50">
                                     <tr>
                                         <th class="px-4 py-3 rounded-l-lg">区分</th>
                                         <th class="px-4 py-3">年月</th>
@@ -153,10 +153,10 @@ export const YearPage = (props: Props) => {
                                 </thead>
                                 <tbody>
                                     {resume.map((item, index) => (
-                                        <tr key={index} class="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition" data-original-year={item.year} data-original-month={item.month} data-label={item.label}>
-                                            <td class="px-4 py-3 font-bold text-gray-800">{item.label}</td>
-                                            <td class="px-4 py-3 font-mono text-indigo-600 resume-date">{item.year}年{item.month}月</td>
-                                            <td class="px-4 py-3 text-gray-500 resume-age">
+                                        <tr key={index} class="border-b border-slate-100 last:border-0 hover:bg-slate-50 transition" data-original-year={item.year} data-original-month={item.month} data-label={item.label}>
+                                            <td class="px-4 py-3 font-bold text-slate-800">{item.label}</td>
+                                            <td class="px-4 py-3 font-mono text-[#22215B] resume-date">{item.year}年{item.month}月</td>
+                                            <td class="px-4 py-3 text-slate-500 resume-age">
                                                 {/* Approximate age calculation for table */}
                                                 {item.year - year}歳
                                             </td>
@@ -203,22 +203,22 @@ export const YearPage = (props: Props) => {
 
                     {/* Related Links */}
                     <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <a href={`/year/${sameZodiacPrev}`} class="block p-4 bg-gray-50 rounded-lg hover:bg-indigo-50 transition border border-transparent hover:border-indigo-200">
-                            <div class="text-xs text-gray-500 mb-1">同じ干支（{zodiac.jyunishi.kana}）の年</div>
-                            <div class="font-bold text-gray-800">← {sameZodiacPrev}年 ({sameZodiacPrev - year}歳)</div>
+                        <a href={`/year/${sameZodiacPrev}`} class="block p-4 bg-white rounded-lg hover:bg-slate-50 transition border border-slate-200 hover:border-[#22215B]/50 shadow-sm">
+                            <div class="text-xs text-slate-500 mb-1">同じ干支（{zodiac.jyunishi.kana}）の年</div>
+                            <div class="font-bold text-slate-800">← {sameZodiacPrev}年 ({sameZodiacPrev - year}歳)</div>
                         </a>
-                        <a href={`/year/${sameZodiacNext}`} class="block p-4 bg-gray-50 rounded-lg hover:bg-indigo-50 transition border border-transparent hover:border-indigo-200 text-right">
-                            <div class="text-xs text-gray-500 mb-1">同じ干支（{zodiac.jyunishi.kana}）の年</div>
-                            <div class="font-bold text-gray-800">{sameZodiacNext}年 ({sameZodiacNext - year}歳) →</div>
+                        <a href={`/year/${sameZodiacNext}`} class="block p-4 bg-white rounded-lg hover:bg-slate-50 transition border border-slate-200 hover:border-[#22215B]/50 shadow-sm text-right">
+                            <div class="text-xs text-slate-500 mb-1">同じ干支（{zodiac.jyunishi.kana}）の年</div>
+                            <div class="font-bold text-slate-800">{sameZodiacNext}年 ({sameZodiacNext - year}歳) →</div>
                         </a>
                     </section>
 
                     {/* Footer Navigation */}
-                    <div class="mt-8 pt-8 border-t border-gray-200">
-                        <h3 class="text-center font-bold text-gray-500 mb-4">他の年齢を調べる</h3>
+                    <div class="mt-8 pt-8 border-t border-slate-200">
+                        <h3 class="text-center font-bold text-slate-500 mb-4">他の年齢を調べる</h3>
                         <div class="flex flex-wrap justify-center gap-2">
                             {[10, 20, 30, 40, 50, 60, 70, 80].map(targetAge => (
-                                <a href={`/age/${targetAge}`} class="px-3 py-1 bg-white border rounded-full text-indigo-600 text-sm hover:bg-indigo-50 transition">
+                                <a href={`/age/${targetAge}`} class="px-3 py-1 bg-white border border-slate-300 rounded-full text-[#22215B] text-sm hover:bg-slate-50 transition">
                                     {targetAge}歳
                                 </a>
                             ))}
