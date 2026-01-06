@@ -5,7 +5,7 @@ describe('calculateResume', () => {
   it('handles early birthday (Apr 1) - Previous academic year', () => {
     // 1987-04-01 is early birthday (academic year starts 1986)
     // Elementary entrance: 1986 + 7 = 1993
-    const result = calculateResume('1987/04/01');
+    const result = calculateResume('1987-04-01');
     const elemEntrance = result.find(e => e.label === '小学校入学');
     expect(elemEntrance).toBeDefined();
     expect(elemEntrance?.year).toBe(1993);
@@ -15,7 +15,7 @@ describe('calculateResume', () => {
   it('handles normal birthday (Apr 2) - Current academic year', () => {
     // 1987-04-02 is normal birthday (academic year starts 1987)
     // Elementary entrance: 1987 + 7 = 1994
-    const result = calculateResume('1987/04/02');
+    const result = calculateResume('1987-04-02');
     const elemEntrance = result.find(e => e.label === '小学校入学');
     expect(elemEntrance).toBeDefined();
     expect(elemEntrance?.year).toBe(1994);
@@ -25,7 +25,7 @@ describe('calculateResume', () => {
   it('handles early birthday (Jan 1) - Previous academic year', () => {
     // 1988-01-01 is early birthday (academic year starts 1987)
     // Elementary entrance: 1987 + 7 = 1994
-    const result = calculateResume('1988/01/01');
+    const result = calculateResume('1988-01-01');
     const elemEntrance = result.find(e => e.label === '小学校入学');
     expect(elemEntrance).toBeDefined();
     expect(elemEntrance?.year).toBe(1994);

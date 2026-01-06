@@ -5,14 +5,18 @@ type ResumeEvent = {
 };
 
 export const calculateResume = (birthDateStr: string): ResumeEvent[] => {
-    const birthDate = new Date(birthDateStr);
-    if (isNaN(birthDate.getTime())) {
+    // Parse YYYY-MM-DD manually to avoid timezone issues
+    const parts = birthDateStr.split("-");
+    if (parts.length !== 3) {
         return [];
     }
+    const birthYear = parseInt(parts[0], 10);
+    const birthMonth = parseInt(parts[1], 10);
+    const birthDay = parseInt(parts[2], 10);
 
-    const birthYear = birthDate.getFullYear();
-    const birthMonth = birthDate.getMonth() + 1;
-    const birthDay = birthDate.getDate();
+    if (isNaN(birthYear) || isNaN(birthMonth) || isNaN(birthDay)) {
+        return [];
+    }
 
     // 早生まれ判定 (4月1日以前生まれは前年度扱い)
     // 学年基準年度 = (月 <= 3 OR (月=4 AND 日=1)) ? 生まれ年-1 : 生まれ年
