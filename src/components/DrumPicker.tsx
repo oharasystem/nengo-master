@@ -33,7 +33,7 @@ export const DrumPicker = (props: DrumPickerProps) => {
       <div id="${props.id}" class="h-full overflow-y-scroll snap-y cursor-pointer relative z-30 no-scrollbar"> 
         ${years.map((y) => html`
           <div
-            class="year-item h-16 flex items-center justify-center text-2xl font-bold snap-center transition-all duration-300 transform text-slate-400 opacity-50"
+            class="year-item h-16 flex items-center justify-center text-2xl font-bold snap-center snap-always transition-all duration-300 transform text-slate-400 opacity-50"
             data-year="${y}"
           >
             ${props.mode === 'ad' ? `${y}年` : getEra(y)}

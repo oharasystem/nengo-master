@@ -9,8 +9,8 @@ type Props = {
     currentYear: number;
     era: string; // "平成元年" etc.
     trivia: {
-        highlight_event?: string;
-        hit_song?: string;
+        events: string[];
+        hitSongs: string[];
     };
 };
 
@@ -37,7 +37,7 @@ export const YearPage = (props: Props) => {
         "name": `${year}年`,
         "startDate": `${year}-01-01`,
         "endDate": `${year}-12-31`,
-        "description": `${year}年の出来事: ${trivia.highlight_event || '情報なし'}`,
+        "description": `${year}年の出来事: ${trivia.events.join(', ') || '情報なし'}`,
         "performer": {
             "@type": "Person",
             "name": `${year}年生まれの人`,

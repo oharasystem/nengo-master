@@ -1,6 +1,5 @@
 /** @jsxImportSource hono/jsx */
 import { Hono } from "hono";
-import type { D1Database } from "@cloudflare/workers-types";
 import { Layout } from "./components/Layout";
 import { DrumPicker } from "./components/DrumPicker";
 import { TriviaCard } from "./components/TriviaCard";
@@ -8,17 +7,14 @@ import { YearPage } from "./components/YearPage";
 import { YearIndex } from "./components/YearIndex";
 import { getEra } from "./utils/era";
 import { calculateResume } from "./utils/resume";
-
-type Bindings = {
-    DB: D1Database;
-};
+import { HISTORY_TIMELINE } from "./const/historyTimeline";
 
 type Trivia = {
-    highlight_event?: string;
-    hit_song?: string;
+    events: string[];
+    hitSongs: string[];
 };
 
-const app = new Hono<{ Bindings: Bindings }>();
+const app = new Hono();
 
 // Constants
 const INITIAL_YEAR = 1989;
@@ -27,18 +23,18 @@ const END_YEAR = 2100;   // Expanded to 2100 as per request
 const CURRENT_YEAR = new Date().getFullYear();
 
 // --- Helpers ---
-async function getTrivia(db: D1Database, year: number): Promise<Trivia> {
-    try {
-        const { results } = await db.prepare(
-            "SELECT * FROM year_trivia WHERE year_ad = ?"
-        )
-            .bind(year)
-            .all();
-        return (results && results.length > 0 ? results[0] : {}) as Trivia;
-    } catch (e) {
-        console.error("DB Error:", e);
-        return {};
+function getTrivia(year: number): Trivia {
+    const data = HISTORY_TIMELINE.find(y => y.year === year);
+    if (!data) {
+        return {
+            events: [],
+            hitSongs: []
+        };
     }
+    return {
+        events: data.events,
+        hitSongs: data.hitSongs
+    };
 }
 
 // --- Routes ---
@@ -46,20 +42,16 @@ async function getTrivia(db: D1Database, year: number): Promise<Trivia> {
 // 1. Top Page
 app.get("/", async (c) => {
     // Fetch initial trivia for SSR
-    let initialData: { era: string; trivia: Trivia } = { era: "", trivia: {} };
+    let initialData: { era: string; trivia: Trivia } = { era: "", trivia: { events: [], hitSongs: [] } };
     try {
-        const trivia = await getTrivia(c.env.DB, INITIAL_YEAR);
+        const trivia = getTrivia(INITIAL_YEAR);
         initialData = {
             era: getEra(INITIAL_YEAR),
             trivia: trivia,
         };
-        // Fallback checks
-        if (!initialData.trivia.highlight_event) {
-            initialData.trivia = { highlight_event: "データなし", hit_song: "データなし" };
-        }
     } catch (e) {
-        console.error("DB Error:", e);
-        initialData = { era: getEra(INITIAL_YEAR), trivia: { highlight_event: "DB Error", hit_song: "DB Error" } };
+        console.error("Error:", e);
+        initialData = { era: getEra(INITIAL_YEAR), trivia: { events: ["Error"], hitSongs: ["Error"] } };
     }
 
     const content = (
@@ -191,7 +183,7 @@ app.get("/year/:year", async (c) => {
     }
 
     const era = getEra(year);
-    const trivia = await getTrivia(c.env.DB, year);
+    const trivia = getTrivia(year);
 
     return c.html(
         (<YearPage
@@ -219,7 +211,7 @@ app.get("/age/:age", async (c) => {
     }
 
     const era = getEra(birthYear);
-    const trivia = await getTrivia(c.env.DB, birthYear);
+    const trivia = getTrivia(birthYear);
 
     return c.html(
         (<YearPage
@@ -297,7 +289,7 @@ app.get("/api/trivia/:year", async (c) => {
     }
 
     const era = getEra(year);
-    const trivia = await getTrivia(c.env.DB, year);
+    const trivia = getTrivia(year);
     return c.json({
         year,
         era,

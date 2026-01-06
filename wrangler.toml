@@ -6,7 +6,4 @@ main = "src/index.tsx"
 binding = "ASSETS"
 directory = "./src/public"
 
-[[d1_databases]]
-binding = "DB"
-database_name = "nengo-db"
-database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
