@@ -3,6 +3,7 @@ import { TriviaCard } from "./TriviaCard";
 import { getZodiac } from "../utils/zodiac";
 import { getYakudoshi } from "../utils/yakudoshi";
 import { calculateResume } from "../utils/resume";
+import { Translation } from "../locales/types";
 
 type Props = {
     year: number;
@@ -12,10 +13,13 @@ type Props = {
         events: string[];
         hitSongs: string[];
     };
+    lang: string;
+    dict: Translation;
+    path: string;
 };
 
 export const YearPage = (props: Props) => {
-    const { year, currentYear, era, trivia } = props;
+    const { year, currentYear, era, trivia, lang, dict, path } = props;
     const age = currentYear - year;
     const zodiac = getZodiac(year);
     const yakudoshi = getYakudoshi(year, currentYear);
@@ -27,7 +31,7 @@ export const YearPage = (props: Props) => {
     const sameZodiacPrev = year - 12;
     const sameZodiacNext = year + 12;
 
-    const title = `${year}年（${era}）生まれ - 年齢・厄年・早見表`;
+    const title = `${year}年（${era}）生まれ - 年齢・厄年・早見表`; // TODO: Translate titles if needed later, kept as is for now as scope is top page focused mostly
     const description = `${year}年（${era}）生まれの人の現在の年齢は${age}歳です。干支は${zodiac.kanji}（${zodiac.jyunishi.kana}）です。入学・卒業年度、厄年の確認、当時の出来事やヒット曲も振り返ります。`;
 
     // JSON-LD
@@ -41,12 +45,15 @@ export const YearPage = (props: Props) => {
         "performer": {
             "@type": "Person",
             "name": `${year}年生まれの人`,
-            "description": `${year}年生まれの人は現在${age}歳`
+            "description": `${year}年生まれの人は现在${age}歳`
         }
     };
 
+    // Helper for URLs
+    const getLink = (p: string) => lang === 'ja' ? p : `/${lang}${p}`;
+
     return (
-        <Layout title={title} description={description}>
+        <Layout title={title} description={description} lang={lang} dict={dict} path={path}>
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
             <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">
@@ -54,77 +61,77 @@ export const YearPage = (props: Props) => {
                     {/* Header */}
                     <header class="text-center py-8">
                         <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-2">
-                            <span class="text-[#22215B]">{year}年</span>
+                            <span class="text-[#22215B]">{year}{dict.home.form_year_suffix}</span>
                             <span class="text-lg sm:text-2xl font-normal text-slate-600 ml-2">({era})</span>
                         </h1>
                         <p class="text-lg font-bold text-slate-700 mb-2">
-                            生まれの方の年齢
+                            {dict.year_page.age_label}
                         </p>
                         <div class="flex flex-col sm:flex-row justify-center items-center gap-4 text-slate-700 font-bold mb-4">
                             <div class="bg-slate-100 px-4 py-2 rounded-lg">
-                                <span class="text-sm text-slate-500 block">誕生日前</span>
+                                <span class="text-sm text-slate-500 block">{dict.year_page.before_birthday}</span>
                                 <span class="text-2xl text-[#22215B]">{age - 1}</span> 歳
                             </div>
                             <div class="hidden sm:block text-slate-300">|</div>
                             <div class="bg-slate-100 px-4 py-2 rounded-lg">
-                                <span class="text-sm text-slate-500 block">誕生日後</span>
+                                <span class="text-sm text-slate-500 block">{dict.year_page.after_birthday}</span>
                                 <span class="text-2xl text-[#22215B]">{age}</span> 歳
                             </div>
                         </div>
                         <div class="mt-2 text-slate-500 font-bold">
-                            干支: <span class="text-slate-800">{zodiac.kanji} ({zodiac.jyunishi.kana})</span> {zodiac.jyunishi.emoji}
+                            {dict.year_page.zodiac_label}: <span class="text-slate-800">{zodiac.kanji} ({zodiac.jyunishi.kana})</span> {zodiac.jyunishi.emoji}
                         </div>
                     </header>
 
                     {/* Navigation (Top) */}
                     <nav class="flex justify-between text-sm sm:text-base font-bold text-[#22215B]">
-                        <a href={`/year/${prevYear}`} class="hover:underline">← {prevYear}年</a>
-                        <a href="/years" class="hover:underline">年表一覧</a>
-                        <a href={`/year/${nextYear}`} class="hover:underline">{nextYear}年 →</a>
+                        <a href={getLink(`/year/${prevYear}`)} class="hover:underline">← {prevYear}{dict.home.form_year_suffix}</a>
+                        <a href={getLink("/years")} class="hover:underline">{dict.nav.hub}</a>
+                        <a href={getLink(`/year/${nextYear}`)} class="hover:underline">{nextYear}{dict.home.form_year_suffix} →</a>
                     </nav>
 
                     {/* Yakudoshi Check */}
                     <section class="bg-white p-6 rounded-xl shadow-sm border border-orange-100">
                         <div class="flex items-center gap-2 mb-4">
                             <span class="bg-orange-100 text-orange-600 p-2 rounded-full">⚡</span>
-                            <h2 class="font-bold text-xl text-slate-800">今年の厄年チェック <span class="text-sm font-normal text-slate-500">（数え年）</span></h2>
+                            <h2 class="font-bold text-xl text-slate-800">{dict.year_page.yakudoshi_title} <span class="text-sm font-normal text-slate-500">（数え年）</span></h2>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Male */}
                             <div class={`p-4 rounded-lg border-2 ${yakudoshi.male ? 'border-red-400 bg-red-50' : 'border-slate-100 bg-slate-50'}`}>
-                                <h3 class="font-bold text-center text-slate-700 mb-2">男性</h3>
+                                <h3 class="font-bold text-center text-slate-700 mb-2">{dict.year_page.yakudoshi_male}</h3>
                                 {yakudoshi.male ? (
                                     <div class="text-center">
                                         <div class="text-2xl font-extrabold text-red-600 mb-1">{yakudoshi.male.label}</div>
                                         <div class="text-sm text-slate-600">数え年: {yakudoshi.male.age}歳</div>
-                                        <div class="text-xs text-red-500 font-bold mt-2">ご注意ください</div>
+                                        <div class="text-xs text-red-500 font-bold mt-2">{dict.year_page.yakudoshi_caution}</div>
                                     </div>
                                 ) : (
-                                    <div class="text-center py-4 text-slate-400 font-bold">厄年ではありません</div>
+                                    <div class="text-center py-4 text-slate-400 font-bold">{dict.year_page.yakudoshi_not}</div>
                                 )}
                             </div>
 
                             {/* Female */}
                             <div class={`p-4 rounded-lg border-2 ${yakudoshi.female ? 'border-red-400 bg-red-50' : 'border-slate-100 bg-slate-50'}`}>
-                                <h3 class="font-bold text-center text-slate-700 mb-2">女性</h3>
+                                <h3 class="font-bold text-center text-slate-700 mb-2">{dict.year_page.yakudoshi_female}</h3>
                                 {yakudoshi.female ? (
                                     <div class="text-center">
                                         <div class="text-2xl font-extrabold text-red-600 mb-1">{yakudoshi.female.label}</div>
                                         <div class="text-sm text-slate-600">数え年: {yakudoshi.female.age}歳</div>
-                                        <div class="text-xs text-red-500 font-bold mt-2">ご注意ください</div>
+                                        <div class="text-xs text-red-500 font-bold mt-2">{dict.year_page.yakudoshi_caution}</div>
                                     </div>
                                 ) : (
-                                    <div class="text-center py-4 text-slate-400 font-bold">厄年ではありません</div>
+                                    <div class="text-center py-4 text-slate-400 font-bold">{dict.year_page.yakudoshi_not}</div>
                                 )}
                             </div>
                         </div>
-                        <p class="text-xs text-slate-400 mt-4 text-center">※厄年は「数え年（生まれた時を1歳とし、元旦に加齢）」で計算しています。</p>
+                        <p class="text-xs text-slate-400 mt-4 text-center">{dict.year_page.yakudoshi_note}</p>
                     </section>
 
                     {/* Trivia */}
                     <section>
-                        <TriviaCard trivia={trivia} era={era} />
+                        <TriviaCard trivia={trivia} era={era} dict={dict} />
                     </section>
 
                     {/* Resume (School History) */}
@@ -132,13 +139,13 @@ export const YearPage = (props: Props) => {
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                             <div class="flex items-center gap-2">
                                 <span class="bg-slate-100 text-[#22215B] p-2 rounded-full">🎓</span>
-                                <h2 class="font-bold text-xl text-slate-800">入学・卒業年度早見表 <span class="text-sm font-normal text-slate-500">（ストレート合格の場合）</span></h2>
+                                <h2 class="font-bold text-xl text-slate-800">{dict.home.calc_title} <span class="text-sm font-normal text-slate-500">（ストレート合格の場合）</span></h2>
                             </div>
 
                             {/* Early Birthday Toggle */}
                             <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border border-slate-200 shadow-sm hover:bg-slate-50 transition select-none">
                                 <input type="checkbox" id="earlyBirthdayToggle" class="w-4 h-4 text-[#22215B] rounded focus:ring-[#22215B] border-slate-300" />
-                                <span class="text-sm font-bold text-slate-700">早生まれ <span class="text-xs text-slate-400 font-normal">(1/1〜4/1)</span></span>
+                                <span class="text-sm font-bold text-slate-700">{dict.home.form_early_bird} <span class="text-xs text-slate-400 font-normal">{dict.home.form_early_bird_desc}</span></span>
                             </label>
                         </div>
 
@@ -155,7 +162,7 @@ export const YearPage = (props: Props) => {
                                     {resume.map((item, index) => (
                                         <tr key={index} class="border-b border-slate-100 last:border-0 hover:bg-slate-50 transition" data-original-year={item.year} data-original-month={item.month} data-label={item.label}>
                                             <td class="px-4 py-3 font-bold text-slate-800">{item.label}</td>
-                                            <td class="px-4 py-3 font-mono text-[#22215B] resume-date">{item.year}年{item.month}月</td>
+                                            <td class="px-4 py-3 font-mono text-[#22215B] resume-date">{item.year}{dict.resume.result_year_suffix}{item.month}{dict.resume.result_month_suffix}</td>
                                             <td class="px-4 py-3 text-slate-500 resume-age">
                                                 {/* Approximate age calculation for table */}
                                                 {item.year - year}歳
@@ -171,30 +178,20 @@ export const YearPage = (props: Props) => {
                                 const isEarly = e.target.checked;
                                 const rows = document.querySelectorAll('#resumeTable tbody tr');
                                 const birthYear = ${year};
+                                const yearSuffix = "${dict.resume.result_year_suffix}";
+                                const monthSuffix = "${dict.resume.result_month_suffix}";
                                 
                                 rows.forEach(row => {
                                     const label = row.dataset.label;
                                     const originalYear = parseInt(row.dataset.originalYear);
                                     const month = parseInt(row.dataset.originalMonth);
                                     
-                                    // "生まれ" is never shifted by Early Birthday logic in terms of DATE, only SCHOOL YEAR logic shifts.
-                                    // However, the resume table shows Entrance/Graduation years.
-                                    // If Early Birthday, school start is 1 year earlier relative to birth year (same as previous year's late birthday).
-                                    // BUT, waiting. resume.ts:
-                                    // baseYear = birthYear - 1 (if early).
-                                    // Entrance = baseYear + 7.
-                                    // So if early, everything except "Birth" should shift -1 year.
-                                    
                                     if (label === '生まれ') return; 
 
-                                    // Logic: If Early Birthday, subtract 1 from the "Standard" year calculated for Late Birthday.
-                                    // Current data in table is for "Standard" (Late Birthday: Apr 2 - Dec 31).
-                                    // So we just subtract 1 if checked.
-                                    
                                     const adjustedYear = isEarly ? originalYear - 1 : originalYear;
                                     const adjustedAge = adjustedYear - birthYear;
                                     
-                                    row.querySelector('.resume-date').textContent = adjustedYear + '年' + month + '月';
+                                    row.querySelector('.resume-date').textContent = adjustedYear + yearSuffix + month + monthSuffix;
                                     row.querySelector('.resume-age').textContent = adjustedAge + '歳';
                                 });
                             });
@@ -203,22 +200,22 @@ export const YearPage = (props: Props) => {
 
                     {/* Related Links */}
                     <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <a href={`/year/${sameZodiacPrev}`} class="block p-4 bg-white rounded-lg hover:bg-slate-50 transition border border-slate-200 hover:border-[#22215B]/50 shadow-sm">
-                            <div class="text-xs text-slate-500 mb-1">同じ干支（{zodiac.jyunishi.kana}）の年</div>
-                            <div class="font-bold text-slate-800">← {sameZodiacPrev}年 ({sameZodiacPrev - year}歳)</div>
+                        <a href={getLink(`/year/${sameZodiacPrev}`)} class="block p-4 bg-white rounded-lg hover:bg-slate-50 transition border border-slate-200 hover:border-[#22215B]/50 shadow-sm">
+                            <div class="text-xs text-slate-500 mb-1">{dict.year_page.related_zodiac_prev.replace('{zodiac}', zodiac.jyunishi.kana)}</div>
+                            <div class="font-bold text-slate-800">← {sameZodiacPrev}{dict.home.form_year_suffix} ({sameZodiacPrev - year}歳)</div>
                         </a>
-                        <a href={`/year/${sameZodiacNext}`} class="block p-4 bg-white rounded-lg hover:bg-slate-50 transition border border-slate-200 hover:border-[#22215B]/50 shadow-sm text-right">
-                            <div class="text-xs text-slate-500 mb-1">同じ干支（{zodiac.jyunishi.kana}）の年</div>
-                            <div class="font-bold text-slate-800">{sameZodiacNext}年 ({sameZodiacNext - year}歳) →</div>
+                        <a href={getLink(`/year/${sameZodiacNext}`)} class="block p-4 bg-white rounded-lg hover:bg-slate-50 transition border border-slate-200 hover:border-[#22215B]/50 shadow-sm text-right">
+                            <div class="text-xs text-slate-500 mb-1">{dict.year_page.related_zodiac_next.replace('{zodiac}', zodiac.jyunishi.kana)}</div>
+                            <div class="font-bold text-slate-800">{sameZodiacNext}{dict.home.form_year_suffix} ({sameZodiacNext - year}歳) →</div>
                         </a>
                     </section>
 
                     {/* Footer Navigation */}
                     <div class="mt-8 pt-8 border-t border-slate-200">
-                        <h3 class="text-center font-bold text-slate-500 mb-4">他の年齢を調べる</h3>
+                        <h3 class="text-center font-bold text-slate-500 mb-4">{dict.year_page.other_ages_title}</h3>
                         <div class="flex flex-wrap justify-center gap-2">
                             {[10, 20, 30, 40, 50, 60, 70, 80].map(targetAge => (
-                                <a href={`/age/${targetAge}`} class="px-3 py-1 bg-white border border-slate-300 rounded-full text-[#22215B] text-sm hover:bg-slate-50 transition">
+                                <a href={getLink(`/age/${targetAge}`)} class="px-3 py-1 bg-white border border-slate-300 rounded-full text-[#22215B] text-sm hover:bg-slate-50 transition">
                                     {targetAge}歳
                                 </a>
                             ))}
