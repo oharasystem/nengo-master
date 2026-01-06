@@ -24,7 +24,7 @@ export const Layout = (props: Props) => {
     // path comes as e.g. "/year/2024" or "/"
     // We want to generate /en/year/2024, /zh/year/2024 etc.
     // Base URL assumed to be origin
-    const origin = "https://nengo-master.pages.dev";
+    const origin = "https://nengo-master.o-lab.workers.dev/";
 
     // Normalize path to not have leading slash duplication if empty
     const cleanPath = path.startsWith('/') ? path : '/' + path;
