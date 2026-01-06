@@ -11,9 +11,9 @@ Cloudflare Workers上でHonoを動作させるサーバーレス/エッジ構成
 ### 技術スタック
 - **Runtime:** Cloudflare Workers
 - **Framework:** Hono (v4.x)
-- **Database:** Cloudflare D1 (SQLite) - Native Bindings
+- **Data Source:** In-Memory Constant (TypeScript)
 - **UI/Styling:** Hono JSX (Server-Side Rendering) + TailwindCSS (CDN)
-- **Client Logic:** Vanilla TS/JS (Inlined in Layout for interactions)
+- **Client Logic:** Vanilla TS/JS (External file: `src/public/client.js`)
 - **Node.js:** v20 (Required)
 
 ### ディレクトリ構成 (Monorepo / Hono Standard)
@@ -21,36 +21,38 @@ Cloudflare Workers上でHonoを動作させるサーバーレス/エッジ構成
 ```text
 nengo-master/
 ├── .nvmrc                # Node.js version config (v20)
-├── wrangler.toml         # Cloudflare Workers 設定 (D1 Binding: DB)
+├── wrangler.toml         # Cloudflare Workers 設定
 ├── package.json
-├── db/
-│   └── seed.sql          # D1 初期データ (Schema & Data)
 ├── src/
 │   ├── index.tsx         # Hono Entry Point & Routing
+│   ├── const/            # Constants & Data
+│   │   └── historyTimeline.ts # Timeline Data (In-Memory)
 │   ├── components/       # JSX Components (UI)
-│   │   ├── Layout.tsx    # Base HTML Wrapper & Client Scripts
+│   │   ├── Layout.tsx    # Base HTML Wrapper
 │   │   ├── DrumPicker.tsx # Year Selection UI
 │   │   └── TriviaCard.tsx # Trivia Display UI
 │   ├── utils/            # Logic Modules
 │   │   ├── era.ts        # 和暦・西暦変換ロジック
 │   │   └── resume.ts     # 入学・卒業年度計算ロジック
 │   └── public/           # Static Assets
+│       └── client.js     # Client-side Logic (Scroll, Fetch, UI Update)
 └── tsconfig.json
 ```
 
-## 3. データベーススキーマ設計 (Cloudflare D1)
+## 3. データ構造 (In-Memory Constant)
 
-その年の出来事や流行を格納するための軽量なテーブル設計。
+データベースの代わりとして、TypeScriptの定数オブジェクトで年表データを管理する。
+`src/const/historyTimeline.ts`
 
-### Table: `year_trivia`
+### Interface: `YearlyTrivia`
 
-| Column Name | Type | Key | Description |
-| :--- | :--- | :--- | :--- |
-| `id` | INTEGER | PK | Auto Increment |
-| `year_ad` | INTEGER | UNIQUE | 西暦 (例: 1989) |
-| `highlight_event` | TEXT | | その年の主要な出来事 |
-| `hit_song` | TEXT | | その年のヒット曲 |
-| `created_at` | INTEGER | | 作成日時 (Unix Timestamp) |
+```typescript
+interface YearlyTrivia {
+  year: number;          // 西暦 (例: 1989)
+  events: string[];      // その年の主要な出来事 (配列)
+  hitSongs: string[];    // その年のヒット曲 (配列)
+}
+```
 
 ## 4. 和暦計算・履歴書計算ロジック仕様
 
@@ -86,8 +88,16 @@ nengo-master/
     "year": 1989,
     "era": "平成元年 / 昭和64年",
     "trivia": {
-      "highlight_event": "昭和天皇崩御、平成改元、消費税(3%)導入",
-      "hit_song": "Diamonds (プリンセス・プリンセス)"
+      "events": [
+        "昭和天皇崩御、平成改元",
+        "消費税(3%)導入",
+        "ベルリンの壁崩壊"
+      ],
+      "hitSongs": [
+        "Diamonds (プリンセス・プリンセス)",
+        "世界でいちばん熱い夏 (プリンセス・プリンセス)",
+        "とんぼ (長渕剛)"
+      ]
     }
   }
   ```
