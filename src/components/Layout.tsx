@@ -12,18 +12,19 @@ type Props = {
     lang: string;
     dict: Translation;
     path: string;
+    host: string;
 };
 
 const SUPPORTED_LANGS = ['ja', 'en', 'zh', 'vi'];
 
 export const Layout = (props: Props) => {
-    const { lang, dict, path } = props;
+    const { lang, dict, path, host } = props;
 
     // Helper to generate alternate links
     // path comes as e.g. "/year/2024" or "/"
     // We want to generate /en/year/2024, /zh/year/2024 etc.
     // Base URL assumed to be origin
-    const origin = "https://nengo-master.pages.dev";
+    const origin = host;
 
     // Normalize path to not have leading slash duplication if empty
     const cleanPath = path.startsWith('/') ? path : '/' + path;

@@ -21,7 +21,12 @@ type Trivia = {
     hitSongs: string[];
 };
 
-const app = new Hono();
+type Bindings = {
+    HOST: string;
+    ASSETS: Fetcher;
+}
+
+const app = new Hono<{ Bindings: Bindings }>();
 
 // Constants
 const INITIAL_YEAR = 1989;
@@ -98,7 +103,7 @@ const homeHandler = async (c: any) => {
     }
 
     const content = (
-        <Layout title={dict.meta.title} description={dict.meta.description} keywords={dict.meta.keywords} lang={lang} dict={dict} path="/">
+        <Layout title={dict.meta.title} description={dict.meta.description} keywords={dict.meta.keywords} lang={lang} dict={dict} path="/" host={c.env.HOST}>
             <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">
                 <div class="min-h-full flex flex-col items-center justify-start pt-8 pb-4 px-4">
 
@@ -219,7 +224,7 @@ const yearsHandler = (c: any) => {
         lang = getLangFromPath(c.req.path);
     }
     const dict = getDict(lang);
-    return c.html((<YearIndex startYear={START_YEAR} endYear={END_YEAR} lang={lang} dict={dict} path="/years" />).toString());
+    return c.html((<YearIndex startYear={START_YEAR} endYear={END_YEAR} lang={lang} dict={dict} path="/years" host={c.env.HOST} />).toString());
 };
 
 const yearDetailHandler = async (c: any) => {
@@ -246,6 +251,7 @@ const yearDetailHandler = async (c: any) => {
             lang={lang}
             dict={dict}
             path={`/year/${year}`}
+            host={c.env.HOST}
         />).toString()
     );
 };
@@ -282,6 +288,7 @@ const ageDetailHandler = async (c: any) => {
             lang={lang}
             dict={dict}
             path={`/age/${age}`}
+            host={c.env.HOST}
         />).toString()
     );
 };
@@ -311,7 +318,7 @@ app.get("/last-year", (c) => c.redirect(`/year/${CURRENT_YEAR - 1}`));
 
 // 6. Sitemap
 app.get("/sitemap.xml", (c) => {
-    const baseUrl = new URL(c.req.url).origin;
+    const baseUrl = c.env.HOST;
 
     let urls = "";
 
