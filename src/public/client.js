@@ -1,6 +1,33 @@
+// Read i18n config from HTML data attributes
+function getI18nConfig() {
+    const container = document.getElementById('top-page-container');
+    if (!container) {
+        // Fallback to Japanese defaults
+        return {
+            yearSuffix: '年',
+            ageSuffix: '歳',
+            monthSuffix: '月',
+            eventsTitle: 'その年の出来事',
+            songsTitle: 'その年のヒット曲',
+            errorPrefix: 'エラー: ',
+            networkError: '計算に失敗しました。通信環境を確認してください。'
+        };
+    }
+    return {
+        yearSuffix: container.dataset.i18nYearSuffix || '年',
+        ageSuffix: container.dataset.i18nAgeSuffix || '歳',
+        monthSuffix: container.dataset.i18nMonthSuffix || '月',
+        eventsTitle: container.dataset.i18nEvents || 'その年の出来事',
+        songsTitle: container.dataset.i18nSongs || 'その年のヒット曲',
+        errorPrefix: container.dataset.i18nErrorPrefix || 'エラー: ',
+        networkError: container.dataset.i18nNetworkError || '計算に失敗しました。通信環境を確認してください。'
+    };
+}
+
 function calculateResume() {
     const year = document.getElementById('birthYear').value;
     const isEarly = document.getElementById('earlyBirthday').checked;
+    const i18n = getI18nConfig();
 
     if (!year) return;
 
@@ -19,21 +46,30 @@ function calculateResume() {
         list.innerHTML = '';
 
         if (data.error) {
-            alert("エラー: " + data.error);
+            alert(i18n.errorPrefix + data.error);
             return;
         }
 
         data.forEach(item => {
             const li = document.createElement('li');
             li.className = 'flex justify-between border-b border-slate-100 pb-2 last:border-0';
-            li.innerHTML = `<span class="font-bold text-slate-600">${item.label}</span> <span class="text-[#22215B] font-mono">${item.year}年${item.month}月</span>`;
+            
+            // Format date based on language
+            let dateStr;
+            if (i18n.monthSuffix === '/') {
+                dateStr = `${item.year}/${item.month}`;
+            } else {
+                dateStr = `${item.year}${i18n.yearSuffix}${item.month}${i18n.monthSuffix}`;
+            }
+            
+            li.innerHTML = `<span class="font-bold text-slate-600">${item.label}</span> <span class="text-[#22215B] font-mono">${dateStr}</span>`;
             list.appendChild(li);
         });
         document.getElementById('resume-result').classList.remove('hidden');
     })
     .catch(err => {
         console.error("Network or parsing error", err);
-        alert("計算に失敗しました。通信環境を確認してください。");
+        alert(i18n.networkError);
     });
 }
 
@@ -49,9 +85,13 @@ let updateTimer = null;
 document.addEventListener('DOMContentLoaded', () => {
     // Initial Year
     const adTextEl = document.getElementById('display-ad');
+    const i18n = getI18nConfig();
+    
     if (adTextEl) {
         const adText = adTextEl.textContent;
-        currentYear = parseInt(adText.replace('年', '')) || 1989;
+        // Remove any suffix (年, or empty for English) to get the year
+        const yearMatch = adText.match(/\d+/);
+        currentYear = yearMatch ? parseInt(yearMatch[0]) : 1989;
     }
 
     // Modals
@@ -225,8 +265,7 @@ function setupPicker(pickerId) {
 }
 
 function updateAll(year) {
-    // Update displays locally first for snappiness if possible, but we need API for ERA and Trivia
-    // Just fetch.
+    const i18n = getI18nConfig();
     
     fetch('/api/trivia/' + year)
         .then(res => res.json())
@@ -234,18 +273,34 @@ function updateAll(year) {
             // Update Displays
             const adEl = document.getElementById('display-ad');
             const eraEl = document.getElementById('display-era');
-            if (adEl) adEl.textContent = data.year + '年';
+            
+            if (adEl) {
+                // Format year with suffix based on language
+                if (i18n.yearSuffix) {
+                    adEl.textContent = data.year + i18n.yearSuffix;
+                } else {
+                    adEl.textContent = data.year;
+                }
+            }
             if (eraEl) eraEl.textContent = data.era;
 
             // Update Trivia Container
-            renderTrivia(data.trivia);
+            renderTrivia(data.trivia, i18n);
         })
         .catch(console.error);
 }
 
-function renderTrivia(trivia) {
+function renderTrivia(trivia, i18n) {
     const container = document.getElementById('trivia-container');
     if (!container) return;
+
+    // Read i18n from container data attributes if not passed
+    if (!i18n) {
+        i18n = {
+            eventsTitle: container.dataset.i18nEvents || 'その年の出来事',
+            songsTitle: container.dataset.i18nSongs || 'その年のヒット曲'
+        };
+    }
 
     const eventsHtml = createListHtml(trivia.events);
     const songsHtml = createListHtml(trivia.hitSongs);
@@ -255,7 +310,7 @@ function renderTrivia(trivia) {
       <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6 transition-all hover:shadow-md">
         <div class="flex items-center gap-2 mb-4">
             <span class="bg-teal-100 text-teal-600 p-2 rounded-full h-10 w-10 flex items-center justify-center text-xl">📅</span>
-            <h3 class="font-bold text-xl text-slate-800">その年の出来事</h3>
+            <h3 class="font-bold text-xl text-slate-800">${i18n.eventsTitle}</h3>
         </div>
         <ul class="text-left text-slate-700 list-disc list-inside space-y-2 ml-1">
           ${eventsHtml}
@@ -265,7 +320,7 @@ function renderTrivia(trivia) {
       <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md">
         <div class="flex items-center gap-2 mb-4">
             <span class="bg-pink-100 text-pink-600 p-2 rounded-full h-10 w-10 flex items-center justify-center text-xl">🎵</span>
-            <h3 class="font-bold text-xl text-slate-800">その年のヒット曲</h3>
+            <h3 class="font-bold text-xl text-slate-800">${i18n.songsTitle}</h3>
         </div>
         <ul class="text-left text-slate-700 list-disc list-inside space-y-2 ml-1">
           ${songsHtml}
