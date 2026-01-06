@@ -1,4 +1,4 @@
-import { html } from "hono/html";
+import { html, raw } from "hono/html";
 import { Child } from "hono/jsx";
 import { Translation } from "../locales/types";
 
@@ -146,7 +146,7 @@ export const Layout = (props: Props) => {
           }
         </style>
         <script>
-            window.AppConfig = ${JSON.stringify(appConfig)};
+            window.AppConfig = ${raw(JSON.stringify(appConfig))};
         </script>
       </head>
       <body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-hidden h-screen w-screen flex flex-col">
