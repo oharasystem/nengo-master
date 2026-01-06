@@ -23,6 +23,7 @@ type Trivia = {
 
 type Bindings = {
     HOST: string;
+    ENVIRONMENT: string;
     ASSETS: Fetcher;
 }
 
@@ -103,7 +104,7 @@ const homeHandler = async (c: any) => {
     }
 
     const content = (
-        <Layout title={dict.meta.title} description={dict.meta.description} keywords={dict.meta.keywords} lang={lang} dict={dict} path="/" host={c.env.HOST}>
+        <Layout title={dict.meta.title} description={dict.meta.description} keywords={dict.meta.keywords} lang={lang} dict={dict} path="/" host={c.env.HOST} env={c.env.ENVIRONMENT}>
             <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">
                 <div class="min-h-full flex flex-col items-center justify-start pt-8 pb-4 px-4">
 
@@ -224,7 +225,7 @@ const yearsHandler = (c: any) => {
         lang = getLangFromPath(c.req.path);
     }
     const dict = getDict(lang);
-    return c.html((<YearIndex startYear={START_YEAR} endYear={END_YEAR} lang={lang} dict={dict} path="/years" host={c.env.HOST} />).toString());
+    return c.html((<YearIndex startYear={START_YEAR} endYear={END_YEAR} lang={lang} dict={dict} path="/years" host={c.env.HOST} env={c.env.ENVIRONMENT} />).toString());
 };
 
 const yearDetailHandler = async (c: any) => {
@@ -252,6 +253,7 @@ const yearDetailHandler = async (c: any) => {
             dict={dict}
             path={`/year/${year}`}
             host={c.env.HOST}
+            env={c.env.ENVIRONMENT}
         />).toString()
     );
 };
@@ -289,6 +291,7 @@ const ageDetailHandler = async (c: any) => {
             dict={dict}
             path={`/age/${age}`}
             host={c.env.HOST}
+            env={c.env.ENVIRONMENT}
         />).toString()
     );
 };

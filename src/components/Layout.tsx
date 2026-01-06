@@ -1,4 +1,4 @@
-import { html } from "hono/html";
+import { html, raw } from "hono/html";
 import { Child } from "hono/jsx";
 import { Translation } from "../locales/types";
 
@@ -13,12 +13,13 @@ type Props = {
     dict: Translation;
     path: string;
     host: string;
+    env?: string;
 };
 
 const SUPPORTED_LANGS = ['ja', 'en', 'zh', 'vi'];
 
 export const Layout = (props: Props) => {
-    const { lang, dict, path, host } = props;
+    const { lang, dict, path, host, env } = props;
 
     // Helper to generate alternate links
     // path comes as e.g. "/year/2024" or "/"
@@ -75,6 +76,18 @@ export const Layout = (props: Props) => {
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="robots" content="index, follow" />
+
+        ${env === 'production' ? html`
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-FCLQYQQWP4"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-FCLQYQQWP4');
+        </script>
+        ` : ''}
 
         ${hreflangs}
 
@@ -134,7 +147,7 @@ export const Layout = (props: Props) => {
           }
         </style>
         <script>
-            window.AppConfig = ${JSON.stringify(appConfig)};
+            window.AppConfig = ${raw(JSON.stringify(appConfig))};
         </script>
       </head>
       <body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-hidden h-screen w-screen flex flex-col">

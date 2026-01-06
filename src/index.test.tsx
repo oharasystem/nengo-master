@@ -66,4 +66,20 @@ describe('App Integration', () => {
     // But the labels should be English.
     expect(text).toContain('Age of those born in')
   })
+
+  it('should not render GA4 tag by default (dev/test env)', async () => {
+    const res = await app.request('/', {}, env)
+    expect(res.status).toBe(200)
+    const text = await res.text()
+    expect(text).not.toContain('googletagmanager.com/gtag/js')
+  })
+
+  it('should render GA4 tag when ENVIRONMENT is production', async () => {
+    // Pass mock env
+    const res = await app.request('/', {}, { ENVIRONMENT: 'production', HOST: 'http://localhost' })
+    expect(res.status).toBe(200)
+    const text = await res.text()
+    expect(text).toContain('googletagmanager.com/gtag/js')
+    expect(text).toContain('G-FCLQYQQWP4')
+  })
 })

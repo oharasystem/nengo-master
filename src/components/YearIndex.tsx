@@ -10,9 +10,10 @@ type Props = {
     dict: Translation;
     path: string;
     host: string;
+    env?: string;
 };
 
-export const YearIndex = ({ startYear, endYear, lang, dict, path, host }: Props) => {
+export const YearIndex = ({ startYear, endYear, lang, dict, path, host, env }: Props) => {
     const currentYear = new Date().getFullYear();
     const nextYear = currentYear + 1;
     const lastYear = currentYear - 1;
@@ -70,7 +71,7 @@ export const YearIndex = ({ startYear, endYear, lang, dict, path, host }: Props)
     };
 
     return (
-        <Layout title={dict.meta.title} description={dict.meta.description} lang={lang} dict={dict} path={path} host={host}>
+        <Layout title={dict.meta.title} description={dict.meta.description} lang={lang} dict={dict} path={path} host={host} env={env}>
             <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">
                 <div class="w-full max-w-5xl mx-auto p-4 flex flex-col gap-8 pb-16">
 

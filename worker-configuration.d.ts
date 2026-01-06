@@ -3,4 +3,5 @@
 interface CloudflareBindings {
 	HOST: string;
 	ASSETS: Fetcher;
+	ENVIRONMENT: string;
 }

@@ -4,9 +4,8 @@ main = "src/index.tsx"
 
 [vars]
 HOST = "https://nengo-master.o-lab.workers.dev"
+ENVIRONMENT = "production"
 
 [assets]
 binding = "ASSETS"
 directory = "./src/public"
-
-
