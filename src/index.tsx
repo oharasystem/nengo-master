@@ -170,36 +170,7 @@ app.get("/", async (c) => {
                         </div>
                     </div>
 
-                    <script dangerouslySetInnerHTML={{
-                        __html: `
-            function calculateResume() {
-                const year = document.getElementById('birthYear').value;
-                const isEarly = document.getElementById('earlyBirthday').checked;
-                
-                if (!year) return;
-                
-                // 早生まれなら1月1日(前年度扱い)、そうでなければ5月1日(今年度扱い)として計算
-                const month = isEarly ? '01' : '05';
-                const birthDate = year + '-' + month + '-01';
-                fetch('/api/calculate/resume', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ birthDate })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    const list = document.getElementById('resume-list');
-                    list.innerHTML = '';
-                    data.forEach(item => {
-                        const li = document.createElement('li');
-                        li.className = 'flex justify-between border-b border-slate-100 pb-2 last:border-0';
-                        li.innerHTML = \`<span class="font-bold text-slate-600">\${item.label}</span> <span class="text-[#22215B] font-mono">\${item.year}年\${item.month}月</span>\`;
-                        list.appendChild(li);
-                    });
-                    document.getElementById('resume-result').classList.remove('hidden');
-                });
-            }
-        ` }} />
+                    <script src="/client.js"></script>
                 </div>
             </div>
         </Layout>
@@ -321,7 +292,9 @@ ${urls}
 // API: Trivia
 app.get("/api/trivia/:year", async (c) => {
     const year = parseInt(c.req.param("year"));
-    if (isNaN(year)) return c.json({ error: "Invalid year" }, 400);
+    if (isNaN(year) || year < START_YEAR || year > END_YEAR) {
+        return c.json({ error: "Invalid year or out of range" }, 400);
+    }
 
     const era = getEra(year);
     const trivia = await getTrivia(c.env.DB, year);
@@ -336,7 +309,9 @@ app.get("/api/trivia/:year", async (c) => {
 app.post("/api/calculate/resume", async (c) => {
     const body = await c.req.json();
     const birthDate = body.birthDate; // YYYY-MM-DD
-    if (!birthDate) return c.json({ error: "birthDate required" }, 400);
+    if (!birthDate || typeof birthDate !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(birthDate)) {
+        return c.json({ error: "Invalid birthDate format. Expected YYYY-MM-DD" }, 400);
+    }
 
     const result = calculateResume(birthDate);
     return c.json(result);
