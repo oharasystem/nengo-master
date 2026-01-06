@@ -39,3 +39,244 @@ function calculateResume() {
 
 // Make it available globally so the form onsubmit can call it
 window.calculateResume = calculateResume;
+
+
+/* --- New Logic for Drum Picker and Dynamic Updates --- */
+
+let currentYear = 1989;
+let updateTimer = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Initial Year
+    const adTextEl = document.getElementById('display-ad');
+    if (adTextEl) {
+        const adText = adTextEl.textContent;
+        currentYear = parseInt(adText.replace('年', '')) || 1989;
+    }
+
+    // Modals
+    setupModal('ad');
+    setupModal('era');
+
+    // Pickers
+    setupPicker('picker-ad');
+    setupPicker('picker-era');
+    
+    // Adjust padding so first/last items can be centered
+    adjustAllPadding();
+    window.addEventListener('resize', adjustAllPadding);
+});
+
+function adjustPadding(pickerId) {
+    const picker = document.getElementById(pickerId);
+    if (!picker || picker.clientHeight === 0) return;
+    
+    // Half height of container - Half height of item (approx 64px / 2 = 32px)
+    const halfHeight = picker.clientHeight / 2;
+    const halfItemHeight = 32; 
+    const pad = halfHeight - halfItemHeight;
+    picker.style.paddingTop = `${pad}px`;
+    picker.style.paddingBottom = `${pad}px`;
+}
+
+function adjustAllPadding() {
+    adjustPadding('picker-ad');
+    adjustPadding('picker-era');
+}
+
+function setupModal(type) {
+    const modal = document.getElementById('modal-' + type);
+    const trigger = document.getElementById('trigger-' + type);
+    const closeBtn = document.getElementById('close-' + type);
+    const content = document.getElementById('modal-content-' + type);
+
+    if(!modal || !trigger || !closeBtn) return;
+
+    const open = () => {
+        const targetYear = currentYear; // Capture current selected year
+        modal.classList.remove('hidden');
+        // Check padding when opening as it might have been 0 if hidden
+        adjustPadding('picker-' + type);
+        
+        // Small delay to allow display property to apply before transition
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            content.classList.remove('translate-y-full'); 
+        }, 10);
+        
+        // Wait for layout to settle before scrolling
+        setTimeout(() => {
+            scrollToYear(targetYear, 'picker-' + type);
+        }, 50);
+    };
+
+    const close = () => {
+        modal.classList.add('opacity-0');
+        content.classList.add('translate-y-full');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    };
+
+    trigger.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) close();
+    });
+}
+
+function scrollToYear(year, pickerId) {
+    const picker = document.getElementById(pickerId);
+    if (!picker) return;
+    
+    const target = picker.querySelector(`[data-year="${year}"]`);
+    if (target) {
+        // Scroll to center
+        // Ensure padding is set before calculating center
+        if (!picker.style.paddingTop) adjustPadding(pickerId);
+        
+        // The center position is: target.offsetTop - padding
+        // Actually, straightforward: target.offsetTop - (containerHeight/2) + (targetHeight/2)
+        // But scroll behavior works on the scrollable area.
+        
+        const top = target.offsetTop - (picker.clientHeight / 2) + (target.clientHeight / 2);
+        picker.scrollTo({ top, behavior: 'instant' });
+    }
+}
+
+function setupPicker(pickerId) {
+    const picker = document.getElementById(pickerId);
+    if (!picker) return;
+
+    const items = picker.querySelectorAll('.year-item');
+    
+    // Click to scroll
+    items.forEach(item => {
+        item.addEventListener('click', () => {
+            const top = item.offsetTop - (picker.clientHeight / 2) + (item.clientHeight / 2);
+            picker.scrollTo({ top, behavior: 'smooth' });
+        });
+    });
+
+    // Custom Wheel Handling for "1 tick = 1 item" feel
+    let isScrolling = false;
+    const ITEM_HEIGHT = 64; // h-16 is 4rem = 64px
+
+    picker.addEventListener('wheel', (e) => {
+        e.preventDefault();
+
+        if (isScrolling) return;
+        isScrolling = true;
+
+        // Calculate direction
+        const direction = e.deltaY > 0 ? 1 : -1;
+        
+        // Determine current slot based on scroll position
+        // We round to find which item is currently "mostly" centered
+        const currentSlot = Math.round(picker.scrollTop / ITEM_HEIGHT);
+        const targetSlot = currentSlot + direction;
+        const targetTop = targetSlot * ITEM_HEIGHT;
+
+        picker.scrollTo({
+            top: targetTop,
+            behavior: 'smooth'
+        });
+
+        // Prevention lock duration
+        // 200ms is a good balance between responsiveness and preventing multi-jump
+        setTimeout(() => {
+            isScrolling = false;
+        }, 50); 
+    }, { passive: false });
+
+    // Observer to detect centered item
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const el = entry.target;
+            if (entry.isIntersecting) {
+                // Highlight
+                el.classList.add('text-[#22215B]', 'scale-110', 'opacity-100');
+                el.classList.remove('text-slate-400', 'opacity-50');
+                
+                // Update state
+                const year = parseInt(el.dataset.year);
+                if (currentYear !== year) {
+                    currentYear = year;
+                    
+                    // Debounce update
+                    if (updateTimer) clearTimeout(updateTimer);
+                    updateTimer = setTimeout(() => {
+                        updateAll(year);
+                    }, 300); // 300ms debounce
+                }
+            } else {
+                // Unhighlight
+                el.classList.remove('text-[#22215B]', 'scale-110', 'opacity-100');
+                el.classList.add('text-slate-400', 'opacity-50');
+            }
+        });
+    }, {
+        root: picker,
+        rootMargin: '-45% 0px -45% 0px', // Narrow center detection
+        threshold: 0
+    });
+
+    items.forEach(item => observer.observe(item));
+}
+
+function updateAll(year) {
+    // Update displays locally first for snappiness if possible, but we need API for ERA and Trivia
+    // Just fetch.
+    
+    fetch('/api/trivia/' + year)
+        .then(res => res.json())
+        .then(data => {
+            // Update Displays
+            const adEl = document.getElementById('display-ad');
+            const eraEl = document.getElementById('display-era');
+            if (adEl) adEl.textContent = data.year + '年';
+            if (eraEl) eraEl.textContent = data.era;
+
+            // Update Trivia Container
+            renderTrivia(data.trivia);
+        })
+        .catch(console.error);
+}
+
+function renderTrivia(trivia) {
+    const container = document.getElementById('trivia-container');
+    if (!container) return;
+
+    const eventsHtml = createListHtml(trivia.events);
+    const songsHtml = createListHtml(trivia.hitSongs);
+
+    // Re-create the HTML structure matching TriviaCard.tsx
+    container.innerHTML = `
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6 transition-all hover:shadow-md">
+        <div class="flex items-center gap-2 mb-4">
+            <span class="bg-teal-100 text-teal-600 p-2 rounded-full h-10 w-10 flex items-center justify-center text-xl">📅</span>
+            <h3 class="font-bold text-xl text-slate-800">その年の出来事</h3>
+        </div>
+        <ul class="text-left text-slate-700 list-disc list-inside space-y-2 ml-1">
+          ${eventsHtml}
+        </ul>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md">
+        <div class="flex items-center gap-2 mb-4">
+            <span class="bg-pink-100 text-pink-600 p-2 rounded-full h-10 w-10 flex items-center justify-center text-xl">🎵</span>
+            <h3 class="font-bold text-xl text-slate-800">その年のヒット曲</h3>
+        </div>
+        <ul class="text-left text-slate-700 list-disc list-inside space-y-2 ml-1">
+          ${songsHtml}
+        </ul>
+      </div>
+    `;
+}
+
+function createListHtml(items) {
+    if (!items || items.length === 0) {
+        return '<li class="list-none text-slate-400">---</li>';
+    }
+    return items.map(item => `<li>${item}</li>`).join('');
+}
