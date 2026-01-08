@@ -26,8 +26,7 @@ export const ContactPage = (props: Props) => {
                         </p>
 
                         <div class="w-full min-h-[400px] flex items-center justify-center bg-slate-50 rounded-lg border border-slate-200 border-dashed">
-                             {/* TODO: Insert Google Form iframe here */}
-                             <p class="text-slate-400 text-sm">（ここにGoogleフォームが表示されます）</p>
+                            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfRJqPAdZQEw94Dr_0NI4RvLgKoU0mC51Mtorh1IX3Y0ig_DA/viewform?embedded=true" class="w-full h-[750px] md:h-[985px]" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
                         </div>
 
                     </div>
