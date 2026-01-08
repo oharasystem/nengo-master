@@ -59,6 +59,9 @@ const ja: Translation = {
     lang_ko: "한국어",
     lang_pt: "Português",
     lang_es: "Español",
+    link_home: "ホーム",
+    link_privacy: "プライバシーポリシー",
+    link_contact: "お問い合わせ",
   },
 };
 

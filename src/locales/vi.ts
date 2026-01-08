@@ -59,6 +59,9 @@ const vi: Translation = {
     lang_ko: "한국어",
     lang_pt: "Português",
     lang_es: "Español",
+    link_home: "Home",
+    link_privacy: "Privacy Policy",
+    link_contact: "Contact",
   },
 };
 

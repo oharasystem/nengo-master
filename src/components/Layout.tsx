@@ -160,6 +160,13 @@ export const Layout = (props: Props) => {
         ${props.children}
         <footer class="bg-slate-100 border-t border-slate-200 py-4 flex-none z-10">
             <div class="max-w-4xl mx-auto px-4 text-center text-sm text-slate-500 flex flex-col gap-2">
+                <div class="flex justify-center gap-4 flex-wrap mb-2 border-b border-slate-200 pb-2">
+                    <a href="${lang === 'ja' ? '/' : '/' + lang + '/'}" class="hover:text-[#22215B]">${dict.footer.link_home}</a>
+                    <span class="text-slate-300">|</span>
+                    <a href="${lang === 'ja' ? '/privacy' : '/' + lang + '/privacy'}" class="hover:text-[#22215B]">${dict.footer.link_privacy}</a>
+                    <span class="text-slate-300">|</span>
+                    <a href="${lang === 'ja' ? '/contact' : '/' + lang + '/contact'}" class="hover:text-[#22215B]">${dict.footer.link_contact}</a>
+                </div>
                 <div class="flex justify-center gap-4 flex-wrap">
                     ${SUPPORTED_LANGS.map(l => {
                         let link = "";

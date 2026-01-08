@@ -57,5 +57,8 @@ export type Translation = {
     lang_ko: string;
     lang_pt: string;
     lang_es: string;
+    link_home: string;
+    link_privacy: string;
+    link_contact: string;
   };
 };
