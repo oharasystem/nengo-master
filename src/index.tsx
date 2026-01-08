@@ -30,7 +30,11 @@ const app = new Hono();
 const INITIAL_YEAR = 1989;
 const START_YEAR = 1900;
 const END_YEAR = 2100;
-const CURRENT_YEAR = new Date().getFullYear();
+// Helper to get current year at request time (not build time)
+// In Cloudflare Workers, top-level code is evaluated at deploy time and cached
+function getCurrentYear(): number {
+    return new Date().getFullYear();
+}
 
 // Dictionary Map
 const dictionaries: Record<string, Translation> = {
@@ -246,7 +250,7 @@ const yearDetailHandler = async (c: any) => {
     return c.html(
         (<YearPage
             year={year}
-            currentYear={CURRENT_YEAR}
+            currentYear={getCurrentYear()}
             era={era}
             trivia={trivia}
             lang={lang}
@@ -270,7 +274,8 @@ const ageDetailHandler = async (c: any) => {
     const dict = getDict(lang);
 
     // Calculate birth year from age
-    const birthYear = CURRENT_YEAR - age;
+    const currentYear = getCurrentYear();
+    const birthYear = currentYear - age;
 
     // Check bounds
     if (birthYear < START_YEAR || birthYear > END_YEAR) {
@@ -283,7 +288,7 @@ const ageDetailHandler = async (c: any) => {
     return c.html(
         (<YearPage
             year={birthYear}
-            currentYear={CURRENT_YEAR}
+            currentYear={currentYear}
             era={era}
             trivia={trivia}
             lang={lang}
@@ -313,9 +318,9 @@ SUPPORTED_LANGS.forEach(lang => {
 
 
 // 5. Relative Pages (Redirects)
-app.get("/this-year", (c) => c.redirect(`/year/${CURRENT_YEAR}`));
-app.get("/next-year", (c) => c.redirect(`/year/${CURRENT_YEAR + 1}`));
-app.get("/last-year", (c) => c.redirect(`/year/${CURRENT_YEAR - 1}`));
+app.get("/this-year", (c) => c.redirect(`/year/${getCurrentYear()}`));
+app.get("/next-year", (c) => c.redirect(`/year/${getCurrentYear() + 1}`));
+app.get("/last-year", (c) => c.redirect(`/year/${getCurrentYear() - 1}`));
 
 // 6. Sitemap
 app.get("/sitemap.xml", (c) => {
