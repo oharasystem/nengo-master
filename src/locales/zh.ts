@@ -56,6 +56,9 @@ const zh: Translation = {
     lang_en: "English",
     lang_zh: "中文 (简体)",
     lang_vi: "Tiếng Việt",
+    lang_ko: "한국어",
+    lang_pt: "Português",
+    lang_es: "Español",
   },
 };
 

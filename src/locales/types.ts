@@ -54,5 +54,8 @@ export type Translation = {
     lang_en: string;
     lang_zh: string;
     lang_vi: string;
+    lang_ko: string;
+    lang_pt: string;
+    lang_es: string;
   };
 };
