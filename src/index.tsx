@@ -5,6 +5,8 @@ import { DrumPicker } from "./components/DrumPicker";
 import { TriviaCard } from "./components/TriviaCard";
 import { YearPage } from "./components/YearPage";
 import { YearIndex } from "./components/YearIndex";
+import { PrivacyPage } from "./components/PrivacyPage";
+import { ContactPage } from "./components/ContactPage";
 import { getEra } from "./utils/era";
 import { calculateResume } from "./utils/resume";
 import { HISTORY_TIMELINE } from "./const/historyTimeline";
@@ -294,6 +296,24 @@ const ageDetailHandler = async (c: any) => {
     );
 };
 
+const privacyHandler = (c: any) => {
+    let lang = c.req.param('lang');
+    if (!lang) {
+        lang = getLangFromPath(c.req.path);
+    }
+    const dict = getDict(lang);
+    return c.html((<PrivacyPage lang={lang} dict={dict} path="/privacy" env={c.env?.ENVIRONMENT} />).toString());
+};
+
+const contactHandler = (c: any) => {
+    let lang = c.req.param('lang');
+    if (!lang) {
+        lang = getLangFromPath(c.req.path);
+    }
+    const dict = getDict(lang);
+    return c.html((<ContactPage lang={lang} dict={dict} path="/contact" env={c.env?.ENVIRONMENT} />).toString());
+};
+
 // --- Route Registration ---
 
 // Default (JA)
@@ -301,6 +321,8 @@ app.get("/", homeHandler);
 app.get("/years", yearsHandler);
 app.get("/year/:year", yearDetailHandler);
 app.get("/age/:age", ageDetailHandler);
+app.get("/privacy", privacyHandler);
+app.get("/contact", contactHandler);
 
 // Multi-language routes
 SUPPORTED_LANGS.forEach(lang => {
@@ -309,6 +331,8 @@ SUPPORTED_LANGS.forEach(lang => {
     app.get(`/${lang}/years`, yearsHandler);
     app.get(`/${lang}/year/:year`, yearDetailHandler);
     app.get(`/${lang}/age/:age`, ageDetailHandler);
+    app.get(`/${lang}/privacy`, privacyHandler);
+    app.get(`/${lang}/contact`, contactHandler);
 });
 
 
@@ -359,6 +383,10 @@ app.get("/sitemap.xml", (c) => {
     for (let age = 0; age <= 100; age++) {
         generateEntry(`/age/${age}`, "0.6", "yearly");
     }
+
+    // Privacy & Contact
+    generateEntry("/privacy", "0.5", "monthly");
+    generateEntry("/contact", "0.5", "monthly");
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

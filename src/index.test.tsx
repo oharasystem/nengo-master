@@ -80,4 +80,35 @@ describe('App Integration', () => {
     expect(text).toContain('googletagmanager.com/gtag/js')
     expect(text).toContain('G-FCLQYQQWP4')
   })
+
+  it('GET /privacy should return 200 and Japanese content', async () => {
+    const res = await app.request('/privacy')
+    expect(res.status).toBe(200)
+    const text = await res.text()
+    expect(text).toContain('プライバシーポリシー')
+    expect(text).toContain('広告の配信について')
+  })
+
+  it('GET /en/privacy should return 200 and English footer links but Japanese content', async () => {
+    const res = await app.request('/en/privacy')
+    expect(res.status).toBe(200)
+    const text = await res.text()
+    expect(text).toContain('Privacy Policy') // Footer link in English
+    expect(text).toContain('広告の配信について') // Content in Japanese
+  })
+
+  it('GET /contact should return 200 and contact form placeholder', async () => {
+    const res = await app.request('/contact')
+    expect(res.status).toBe(200)
+    const text = await res.text()
+    expect(text).toContain('お問い合わせ')
+    expect(text).toContain('Googleフォームが表示されます')
+  })
+
+  it('GET /en/contact should return 200', async () => {
+    const res = await app.request('/en/contact')
+    expect(res.status).toBe(200)
+    const text = await res.text()
+    expect(text).toContain('Contact') // Footer link
+  })
 })
