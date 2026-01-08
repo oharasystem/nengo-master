@@ -173,7 +173,7 @@ export const Layout = (props: Props) => {
                     })}
                 </div>
                 <div class="text-xs text-slate-400 mt-2">
-                    © ${new Date().getFullYear()} Ohara System
+                    © ${new Date().getFullYear()} Nengo Master
                 </div>
             </div>
         </footer>
