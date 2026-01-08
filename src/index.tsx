@@ -157,7 +157,7 @@ const homeHandler = async (c: any) => {
                     </div>
 
                     {/* Resume Calculator */}
-                    <div class="w-full max-w-3xl bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                    <div class="w-full max-w-3xl bg-white p-6 rounded-xl border border-slate-100 shadow-sm mb-6">
                         <h3 class="text-center font-bold text-slate-700 mb-2 flex items-center justify-center gap-2 text-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                             {dict.home.calc_title}
@@ -187,6 +187,20 @@ const homeHandler = async (c: any) => {
                             <ul class="text-left text-sm space-y-2" id="resume-list"></ul>
                         </div>
                     </div>
+
+                    {/* About Section - JA Only */}
+                    {lang === 'ja' && (
+                        <div class="w-full max-w-3xl bg-white p-6 rounded-xl border border-slate-100 shadow-sm mb-6">
+                            <h2 class="text-lg font-bold text-slate-700 mb-3">年号マスターについて</h2>
+                            <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                                当サイトは、西暦と和暦（令和・平成・昭和・大正・明治）を瞬時に変換・確認できる無料ツールです。
+                                履歴書や職務経歴書の作成、役所への申請書類など、日常生活でふと「今の和暦」や「あの時の西暦」が必要になった際にご活用ください。
+                            </p>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                入学・卒業年度の自動計算機能も備えており、学歴欄の記入ミスを防ぐのにも便利です。
+                            </p>
+                        </div>
+                    )}
 
                     {/* Modals and Scripts */}
                     <div id="modal-ad" class="fixed inset-0 z-50 hidden transition-all duration-300 opacity-0 bg-slate-900/60 backdrop-blur-sm flex flex-col items-center justify-end sm:justify-center">

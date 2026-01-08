@@ -84,6 +84,16 @@ export const YearPage = (props: Props) => {
                         </div>
                     </header>
 
+                    {/* Intro Section - JA Only */}
+                    {lang === 'ja' && (
+                        <div class="text-sm text-slate-600 leading-relaxed mb-6">
+                            <p>
+                                西暦{year}年は、和暦では{era}です。干支は{zodiac.kanji}（{zodiac.jikkan.kana}{zodiac.jyunishi.kana}）にあたります。<br />
+                                このページでは、{year}年生まれの方の年齢早見表や、入学・卒業年度、その年に起きた主な出来事などをまとめています。
+                            </p>
+                        </div>
+                    )}
+
                     {/* Navigation (Top) */}
                     <nav class="flex justify-between text-sm sm:text-base font-bold text-[#22215B]">
                         <a href={getLink(`/year/${prevYear}`)} class="hover:underline">← {prevYear}{dict.home.form_year_suffix}</a>
