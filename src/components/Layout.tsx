@@ -15,7 +15,7 @@ type Props = {
     env?: string;
 };
 
-const SUPPORTED_LANGS = ['ja', 'en', 'zh', 'vi'];
+const SUPPORTED_LANGS = ['ja', 'en', 'zh', 'vi', 'ko', 'pt', 'es'];
 
 export const Layout = (props: Props) => {
     const { lang, dict, path, env } = props;
@@ -159,17 +159,22 @@ export const Layout = (props: Props) => {
           </header>
         ${props.children}
         <footer class="bg-slate-100 border-t border-slate-200 py-4 flex-none z-10">
-            <div class="max-w-4xl mx-auto px-4 text-center text-sm text-slate-500 flex justify-center gap-4">
-               ${SUPPORTED_LANGS.map(l => {
-                   let link = "";
-                   if (l === 'ja') link = cleanPath; // e.g. /year/2024
-                   else {
-                       if (cleanPath === '/') link = `/${l}/`;
-                       else link = `/${l}${cleanPath}`;
-                   }
-                   const isActive = l === lang;
-                   return html`<a href="${link}" class="${isActive ? 'font-bold text-[#22215B]' : 'hover:text-[#22215B]'}">${dict.footer['lang_' + l as keyof typeof dict.footer]}</a>`;
-               })}
+            <div class="max-w-4xl mx-auto px-4 text-center text-sm text-slate-500 flex flex-col gap-2">
+                <div class="flex justify-center gap-4 flex-wrap">
+                    ${SUPPORTED_LANGS.map(l => {
+                        let link = "";
+                        if (l === 'ja') link = cleanPath; // e.g. /year/2024
+                        else {
+                            if (cleanPath === '/') link = `/${l}/`;
+                            else link = `/${l}${cleanPath}`;
+                        }
+                        const isActive = l === lang;
+                        return html`<a href="${link}" class="${isActive ? 'font-bold text-[#22215B]' : 'hover:text-[#22215B]'}">${dict.footer['lang_' + l as keyof typeof dict.footer]}</a>`;
+                    })}
+                </div>
+                <div class="text-xs text-slate-400 mt-2">
+                    © ${new Date().getFullYear()} Nengo Master
+                </div>
             </div>
         </footer>
       </body>

@@ -14,6 +14,9 @@ import ja from "./locales/ja";
 import en from "./locales/en";
 import zh from "./locales/zh";
 import vi from "./locales/vi";
+import ko from "./locales/ko";
+import pt from "./locales/pt";
+import es from "./locales/es";
 import { Translation } from "./locales/types";
 
 type Trivia = {
@@ -35,10 +38,13 @@ const dictionaries: Record<string, Translation> = {
     en,
     zh,
     vi,
+    ko,
+    pt,
+    es,
 };
 
 // Supported Languages for Routing
-const SUPPORTED_LANGS = ['en', 'zh', 'vi']; // 'ja' is default (root)
+const SUPPORTED_LANGS = ['en', 'zh', 'vi', 'ko', 'pt', 'es']; // 'ja' is default (root)
 
 // Helper to get dictionary from lang code
 function getDict(lang: string = 'ja'): Translation {
