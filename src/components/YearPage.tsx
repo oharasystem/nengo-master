@@ -1,8 +1,9 @@
 import { Layout } from "./Layout";
 import { TriviaCard } from "./TriviaCard";
-import { getZodiac } from "../utils/zodiac";
+import { getZodiac, getSexagenaryCycle } from "../utils/zodiac";
 import { getYakudoshi } from "../utils/yakudoshi";
 import { calculateResume } from "../utils/resume";
+import { getEraTransitionAlert } from "../utils/era";
 import { Translation } from "../locales/types";
 
 type Props = {
@@ -25,6 +26,10 @@ export const YearPage = (props: Props) => {
     const zodiac = getZodiac(year);
     const yakudoshi = getYakudoshi(year, currentYear);
     const resume = calculateResume(`${year}-04-02`);
+
+    // Extended logic for JA
+    const eraAlert = lang === 'ja' ? getEraTransitionAlert(year) : null;
+    const sexagenaryCycle = lang === 'ja' ? getSexagenaryCycle(year) : null;
 
     // Links
     const prevYear = year - 1;
@@ -65,6 +70,15 @@ export const YearPage = (props: Props) => {
                             <span class="text-[#22215B]">{year}{dict.home.form_year_suffix}</span>
                             <span class="text-lg sm:text-2xl font-normal text-slate-600 ml-2">({era})</span>
                         </h1>
+
+                        {/* Era Transition Alert (JA Only) */}
+                        {eraAlert && (
+                            <div class="max-w-xl mx-auto mb-6 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-900 text-sm font-bold flex items-center justify-center gap-2 shadow-sm">
+                                <span>⚠️</span>
+                                <span>{eraAlert}</span>
+                            </div>
+                        )}
+
                         <p class="text-lg font-bold text-slate-700 mb-2">
                             {dict.year_page.age_label}
                         </p>
@@ -92,6 +106,24 @@ export const YearPage = (props: Props) => {
                                 このページでは、{year}年生まれの方の年齢早見表や、入学・卒業年度、その年に起きた主な出来事などをまとめています。
                             </p>
                         </div>
+                    )}
+
+                    {/* Sexagenary Cycle Info (JA Only) */}
+                    {sexagenaryCycle && (
+                        <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                             <div class="flex items-center gap-2 mb-3">
+                                <span class="bg-slate-100 text-[#22215B] p-2 rounded-full">🗓️</span>
+                                <h2 class="font-bold text-xl text-slate-800">干支・六十干支</h2>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-lg border border-slate-100">
+                                <div class="font-bold text-lg text-[#22215B] mb-2">
+                                    {sexagenaryCycle.kanji} <span class="text-sm font-normal text-slate-500">（{sexagenaryCycle.kana}）</span>
+                                </div>
+                                <p class="text-sm text-slate-700 leading-relaxed">
+                                    {sexagenaryCycle.trivia}
+                                </p>
+                            </div>
+                        </section>
                     )}
 
                     {/* Navigation (Top) */}
