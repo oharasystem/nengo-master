@@ -123,4 +123,20 @@ describe('App Integration', () => {
     const text = await res.text()
     expect(text).toContain('Contact') // Footer link
   })
+
+  it('GET /articles should return 200 and list content', async () => {
+    const res = await app.request('/articles')
+    expect(res.status).toBe(200)
+    const text = await res.text()
+    expect(text).toContain('コラム一覧')
+    expect(text).toContain('年号マスターを開設しました')
+  })
+
+  it('GET /articles/site-opened should return 200 and detail content', async () => {
+    const res = await app.request('/articles/site-opened')
+    expect(res.status).toBe(200)
+    const text = await res.text()
+    expect(text).toContain('年号マスターを開設しました')
+    expect(text).toContain('サイトの目的')
+  })
 })
