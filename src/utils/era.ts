@@ -19,3 +19,20 @@ export const getEra = (year: number): string => {
 
     return result.join(" / ");
 };
+
+export const getEraTransitionAlert = (year: number): string | null => {
+    switch (year) {
+        case 1926:
+            return "大正は12月24日まで、昭和は12月25日から";
+        case 1989:
+            return "昭和は1月7日まで、平成は1月8日から";
+        case 2019:
+            return "平成は4月30日まで、令和は5月1日から";
+        case 1868:
+            return "明治は1月25日から（旧暦）、新暦移行に注意";
+        case 1912:
+            return "明治は7月29日まで、大正は7月30日から";
+        default:
+            return null;
+    }
+};

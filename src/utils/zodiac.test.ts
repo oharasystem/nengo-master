@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getZodiac } from './zodiac';
+import { getZodiac, getSexagenaryCycle } from './zodiac';
 
 describe('getZodiac', () => {
     it('returns correct Zodiac for 2024 (Wood Dragon / 甲辰)', () => {
@@ -27,5 +27,42 @@ describe('getZodiac', () => {
         // (2023 - 4) % 12 = 3 -> 卯
         const result = getZodiac(2023);
         expect(result.kanji).toBe('癸卯');
+    });
+});
+
+describe('getSexagenaryCycle', () => {
+    it('returns correct trivia for 1924 (Kinoene / 甲子)', () => {
+        const result = getSexagenaryCycle(1924);
+        expect(result.kanji).toBe('甲子');
+        expect(result.kana).toBe('きのえね');
+        expect(result.trivia).toContain('甲子園球場');
+    });
+
+    it('returns correct trivia for 1966 (Hinoeuma / 丙午)', () => {
+        const result = getSexagenaryCycle(1966);
+        expect(result.kanji).toBe('丙午');
+        expect(result.kana).toBe('ひのえうま');
+        expect(result.trivia).toContain('迷信の影響で出生数が一時的に下がった');
+    });
+
+    it('returns default trivia for 2026 (Hinoeuma / 丙午)', () => {
+        // 2026 is also Hinoeuma, so it should have the same trivia as 1966
+        const result = getSexagenaryCycle(2026);
+        expect(result.kanji).toBe('丙午');
+        expect(result.kana).toBe('ひのえうま');
+        expect(result.trivia).toContain('迷信の影響で出生数が一時的に下がった');
+    });
+
+    it('returns default trivia for non-special years (e.g., 2024 / 甲辰)', () => {
+        const result = getSexagenaryCycle(2024);
+        expect(result.kanji).toBe('甲辰');
+        expect(result.kana).toBe('きのえたつ');
+        expect(result.trivia).toBe('2024年の干支は【甲辰（きのえたつ）】です。これは60年に一度巡ってくる干支です。');
+    });
+
+    it('returns correct trivia for 1868 (Boshin / 戊辰)', () => {
+        const result = getSexagenaryCycle(1868);
+        expect(result.kanji).toBe('戊辰');
+        expect(result.trivia).toContain('戊辰戦争');
     });
 });
