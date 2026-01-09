@@ -7,9 +7,13 @@ import { YearPage } from "./components/YearPage";
 import { YearIndex } from "./components/YearIndex";
 import { PrivacyPage } from "./components/PrivacyPage";
 import { ContactPage } from "./components/ContactPage";
+import { ArticleIndex } from "./components/ArticleIndex";
+import { ArticlePage } from "./components/ArticlePage";
+import { ArticleCard } from "./components/ArticleCard";
 import { getEra } from "./utils/era";
 import { calculateResume } from "./utils/resume";
 import { HISTORY_TIMELINE } from "./const/historyTimeline";
+import { articles } from "./data/articles";
 
 // Locales
 import ja from "./locales/ja";
@@ -202,6 +206,31 @@ const homeHandler = async (c: any) => {
                         </div>
                     )}
 
+                    {/* New Columns Section - JA Only */}
+                    {lang === 'ja' && articles.length > 0 && (
+                        <div class="w-full max-w-3xl mb-8">
+                            <div class="flex items-center justify-between mb-4 px-1">
+                                <h2 class="text-xl font-bold text-[#22215B] flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                                    </svg>
+                                    新着コラム
+                                </h2>
+                                <a href="/articles" class="text-sm font-bold text-slate-500 hover:text-[#22215B] flex items-center gap-1 transition-colors">
+                                    一覧を見る
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {articles.slice(0, 4).map((article) => (
+                                    <ArticleCard key={article.slug} article={article} />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Modals and Scripts */}
                     <div id="modal-ad" class="fixed inset-0 z-50 hidden transition-all duration-300 opacity-0 bg-slate-900/60 backdrop-blur-sm flex flex-col items-center justify-end sm:justify-center">
                         <div class="w-full max-w-lg sm:max-w-2xl sm:min-w-[600px] bg-slate-50 rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden transform transition-transform translate-y-full sm:translate-y-0 sm:scale-95 duration-300 h-[70vh] sm:h-[600px]" id="modal-content-ad">
@@ -333,6 +362,33 @@ const contactHandler = (c: any) => {
     return c.html((<ContactPage lang={lang} dict={dict} path="/contact" env={c.env?.ENVIRONMENT} />).toString());
 };
 
+const articlesHandler = (c: any) => {
+    // Only Japanese content, but we support the route structure if needed.
+    // We force JA for simplicity as requested.
+    let lang = c.req.param('lang');
+    if (!lang) {
+        lang = getLangFromPath(c.req.path);
+    }
+    const dict = getDict(lang);
+    return c.html((<ArticleIndex articles={articles} lang={lang} dict={dict} path="/articles" env={c.env?.ENVIRONMENT} />).toString());
+};
+
+const articleDetailHandler = (c: any) => {
+    const slug = c.req.param('slug');
+    const article = articles.find(a => a.slug === slug);
+    if (!article) {
+        return c.notFound();
+    }
+
+    let lang = c.req.param('lang');
+    if (!lang) {
+        lang = getLangFromPath(c.req.path);
+    }
+    const dict = getDict(lang);
+
+    return c.html((<ArticlePage article={article} lang={lang} dict={dict} path={`/articles/${slug}`} env={c.env?.ENVIRONMENT} />).toString());
+};
+
 // --- Route Registration ---
 
 // Default (JA)
@@ -342,6 +398,8 @@ app.get("/year/:year", yearDetailHandler);
 app.get("/age/:age", ageDetailHandler);
 app.get("/privacy", privacyHandler);
 app.get("/contact", contactHandler);
+app.get("/articles", articlesHandler);
+app.get("/articles/:slug", articleDetailHandler);
 
 // Multi-language routes
 SUPPORTED_LANGS.forEach(lang => {
@@ -406,6 +464,12 @@ app.get("/sitemap.xml", (c) => {
     // Privacy & Contact
     generateEntry("/privacy", "0.5", "monthly");
     generateEntry("/contact", "0.5", "monthly");
+
+    // Articles (JA only)
+    generateEntry("/articles", "0.8", "weekly");
+    articles.forEach(a => {
+        generateEntry(`/articles/${a.slug}`, "0.7", "monthly");
+    });
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
