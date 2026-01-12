@@ -9,8 +9,13 @@ const zh: Translation = {
   header: {
     title: "年号大师",
   },
+  common: {
+    copied: "Copied!",
+  },
   nav: {
     hub: "按年表浏览",
+    home: "Home",
+    columns: "Columns",
   },
   home: {
     label_ad: "西历 (AD)",

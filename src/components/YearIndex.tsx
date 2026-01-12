@@ -1,4 +1,5 @@
 import { Layout } from "./Layout";
+import { Breadcrumbs } from "./Breadcrumbs";
 import { getZodiac } from "../utils/zodiac";
 import { getEra } from "../utils/era";
 import { Translation } from "../locales/types";
@@ -48,6 +49,11 @@ export const YearIndex = ({ startYear, endYear, lang, dict, path, env }: Props) 
     // Helper
     const getLink = (p: string) => lang === 'ja' ? p : `/${lang}${p}`;
 
+    const breadcrumbItems = [
+        { label: dict.nav.home, path: getLink('/') },
+        { label: dict.nav.hub, path: path }
+    ];
+
     const YearGrid = ({ years }: { years: number[] }) => {
         if (years.length === 0) return <div class="text-slate-400 text-sm">{dict.trivia.empty}</div>;
         return (
@@ -73,6 +79,8 @@ export const YearIndex = ({ startYear, endYear, lang, dict, path, env }: Props) 
         <Layout title={dict.meta.title} description={dict.meta.description} lang={lang} dict={dict} path={path} env={env}>
             <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">
                 <div class="w-full max-w-5xl mx-auto p-4 flex flex-col gap-8 pb-16">
+
+                    <Breadcrumbs items={breadcrumbItems} />
 
                     <header class="text-center pt-4">
                         <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800">{dict.nav.hub}</h1>

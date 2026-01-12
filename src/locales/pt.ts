@@ -9,8 +9,13 @@ const pt: Translation = {
   header: {
     title: "Nengo Master",
   },
+  common: {
+    copied: "Copied!",
+  },
   nav: {
     hub: "Navegar pela Linha do Tempo",
+    home: "Home",
+    columns: "Columns",
   },
   home: {
     label_ad: "Ocidental (AD)",

@@ -1,5 +1,7 @@
 import { Layout } from "./Layout";
 import { TriviaCard } from "./TriviaCard";
+import { CopyButton } from "./CopyButton";
+import { Breadcrumbs } from "./Breadcrumbs";
 import { getZodiac, getSexagenaryCycle } from "../utils/zodiac";
 import { getYakudoshi } from "../utils/yakudoshi";
 import { calculateResume } from "../utils/resume";
@@ -60,17 +62,27 @@ export const YearPage = (props: Props) => {
     // Helper for URLs
     const getLink = (p: string) => lang === 'ja' ? p : `/${lang}${p}`;
 
+    const breadcrumbItems = [
+        { label: dict.nav.home, path: getLink('/') },
+        { label: dict.nav.hub, path: getLink('/years') },
+        { label: `${year}${dict.home.form_year_suffix} (${era})`, path: path }
+    ];
+
     return (
         <Layout title={title} description={description} lang={lang} dict={dict} path={path} env={env}>
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
             <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">
                 <div class="w-full max-w-4xl mx-auto p-4 flex flex-col gap-8">
+
+                    <Breadcrumbs items={breadcrumbItems} />
+
                     {/* Header */}
                     <header class="text-center py-8">
-                        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-2">
+                        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-2 flex items-center justify-center gap-3">
                             <span class="text-[#22215B]">{year}{dict.home.form_year_suffix}</span>
-                            <span class="text-lg sm:text-2xl font-normal text-slate-600 ml-2">({era})</span>
+                            <span class="text-lg sm:text-2xl font-normal text-slate-600">({era})</span>
+                            <CopyButton text={`${year}${dict.home.form_year_suffix} (${era})`} />
                         </h1>
 
                         {/* Era Transition Alert (JA Only) */}

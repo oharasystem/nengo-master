@@ -1,4 +1,5 @@
 import { Layout } from "./Layout";
+import { Breadcrumbs } from "./Breadcrumbs";
 import { Article } from "../data/articles";
 import { Translation } from "../locales/types";
 
@@ -11,6 +12,13 @@ interface ArticlePageProps {
 }
 
 export const ArticlePage = ({ article, lang, dict, path, env }: ArticlePageProps) => {
+  const getLink = (p: string) => lang === 'ja' ? p : `/${lang}${p}`;
+  const breadcrumbItems = [
+    { label: dict.nav.home, path: getLink('/') },
+    { label: dict.nav.columns, path: getLink('/articles') },
+    { label: article.title, path: path }
+  ];
+
   return (
     <Layout
       title={article.title}
@@ -22,6 +30,10 @@ export const ArticlePage = ({ article, lang, dict, path, env }: ArticlePageProps
     >
       <div className="flex-1 w-full relative overflow-y-auto bg-slate-50">
         <div className="min-h-full flex flex-col items-center justify-start pt-8 pb-12 px-4">
+
+          <div className="w-full max-w-3xl mb-4">
+            <Breadcrumbs items={breadcrumbItems} />
+          </div>
 
           <article className="w-full max-w-3xl bg-white p-6 sm:p-10 rounded-xl border border-slate-100 shadow-sm mb-8">
             <header className="mb-8 border-b border-slate-100 pb-8">

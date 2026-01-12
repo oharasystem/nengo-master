@@ -9,8 +9,13 @@ const ja: Translation = {
   header: {
     title: "年号マスター",
   },
+  common: {
+    copied: "コピーしました",
+  },
   nav: {
     hub: "年表一覧から探す",
+    home: "Home",
+    columns: "コラム",
   },
   home: {
     label_ad: "西暦",

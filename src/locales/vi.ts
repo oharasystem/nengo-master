@@ -9,8 +9,13 @@ const vi: Translation = {
   header: {
     title: "Nengo Master",
   },
+  common: {
+    copied: "Copied!",
+  },
   nav: {
     hub: "Duyệt theo niên biểu",
+    home: "Home",
+    columns: "Columns",
   },
   home: {
     label_ad: "Tây lịch (AD)",
