@@ -58,7 +58,8 @@ export const Layout = (props: Props) => {
     const appConfig = {
         labels: dict.home,
         trivia: dict.trivia,
-        resume: dict.resume
+        resume: dict.resume,
+        common: dict.common
     };
 
     return html`<!DOCTYPE html>
@@ -147,6 +148,41 @@ export const Layout = (props: Props) => {
         </style>
         <script>
             window.AppConfig = ${raw(JSON.stringify(appConfig))};
+
+            // Global Copy Function
+            window.copyToClipboard = function(text, btn) {
+                 navigator.clipboard.writeText(text).then(function() {
+                     showToast(window.AppConfig.common.copied);
+                 }).catch(function(err) {
+                     console.error('Could not copy text: ', err);
+                 });
+            };
+
+            function showToast(msg) {
+                // Remove existing toast if any
+                var existing = document.getElementById('toast-notification');
+                if (existing) existing.remove();
+
+                var div = document.createElement('div');
+                div.id = 'toast-notification';
+                div.textContent = msg;
+                div.style.cssText = "position:fixed; top:20%; left:50%; transform:translate(-50%, -50%); background:rgba(34, 33, 91, 0.9); color:white; padding:10px 20px; border-radius:30px; z-index:9999; font-size:14px; font-weight:bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display:flex; items-center:center; gap:8px;";
+
+                // Add Check Icon
+                var icon = document.createElement('span');
+                icon.innerHTML = '✓';
+                div.prepend(icon);
+
+                document.body.appendChild(div);
+
+                // Fade out
+                setTimeout(function() {
+                    div.style.transition = "opacity 0.5s, transform 0.5s";
+                    div.style.opacity = "0";
+                    div.style.transform = "translate(-50%, -20%)"; // Float up
+                    setTimeout(function() { div.remove(); }, 500);
+                }, 2000);
+            }
         </script>
       </head>
       <body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-hidden h-screen w-screen flex flex-col">

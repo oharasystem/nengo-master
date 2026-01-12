@@ -9,8 +9,13 @@ const ko: Translation = {
   header: {
     title: "Nengo Master",
   },
+  common: {
+    copied: "Copied!",
+  },
   nav: {
     hub: "연도별 타임라인 보기",
+    home: "Home",
+    columns: "Columns",
   },
   home: {
     label_ad: "서기 (AD)",

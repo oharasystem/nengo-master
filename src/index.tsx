@@ -10,6 +10,7 @@ import { ContactPage } from "./components/ContactPage";
 import { ArticleIndex } from "./components/ArticleIndex";
 import { ArticlePage } from "./components/ArticlePage";
 import { ArticleCard } from "./components/ArticleCard";
+import { CopyButton } from "./components/CopyButton";
 import { getEra } from "./utils/era";
 import { calculateResume } from "./utils/resume";
 import { HISTORY_TIMELINE } from "./const/historyTimeline";
@@ -129,7 +130,10 @@ const homeHandler = async (c: any) => {
                         <div id="trigger-ad" class="flex-1 w-full sm:w-auto min-w-[240px] bg-white p-4 rounded-lg shadow-sm border border-slate-200 cursor-pointer hover:border-[#22215B] hover:shadow-md transition-all active:scale-95 group relative overflow-hidden">
                             <label class="block text-xs font-bold text-slate-400 mb-1">{dict.home.label_ad}</label>
                             <div class="flex justify-between items-end">
-                                <div id="display-ad" class="text-2xl font-bold text-slate-800">{INITIAL_YEAR}{dict.home.form_year_suffix}</div>
+                                <div class="flex items-center gap-2">
+                                    <div id="display-ad" class="text-2xl font-bold text-slate-800">{INITIAL_YEAR}{dict.home.form_year_suffix}</div>
+                                    <CopyButton text={`${INITIAL_YEAR}${dict.home.form_year_suffix}`} className="relative z-10" />
+                                </div>
                                 <div class="text-slate-300 group-hover:text-[#22215B] mb-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                                 </div>
@@ -147,7 +151,10 @@ const homeHandler = async (c: any) => {
                         <div id="trigger-era" class="flex-1 w-full sm:w-auto min-w-[240px] bg-white p-4 rounded-lg shadow-sm border border-slate-200 cursor-pointer hover:border-[#22215B] hover:shadow-md transition-all active:scale-95 group relative overflow-hidden">
                             <label class="block text-xs font-bold text-slate-400 mb-1">{dict.home.label_era}</label>
                             <div class="flex justify-between items-end">
-                                <div id="display-era" class="text-xl font-bold text-slate-800">{initialData.era}</div>
+                                <div class="flex items-center gap-2">
+                                    <div id="display-era" class="text-xl font-bold text-slate-800">{initialData.era}</div>
+                                    <CopyButton text={initialData.era} className="relative z-10" />
+                                </div>
                                 <div class="text-slate-300 group-hover:text-[#22215B] mb-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                                 </div>

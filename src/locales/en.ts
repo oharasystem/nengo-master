@@ -9,8 +9,13 @@ const en: Translation = {
   header: {
     title: "Nengo Master",
   },
+  common: {
+    copied: "Copied!",
+  },
   nav: {
     hub: "Browse by Year Timeline",
+    home: "Home",
+    columns: "Columns",
   },
   home: {
     label_ad: "Western (AD)",

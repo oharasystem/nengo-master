@@ -12,7 +12,7 @@ const resumeLabels = config.resume || {
     error_input: "エラー: ",
     error_calc: "計算に失敗しました。通信環境を確認してください。",
     result_year_suffix: "年",
-    result_month_suffix: "月"
+    result_month_suffix: "月",
 };
 
 function calculateResume() {
@@ -257,8 +257,20 @@ function updateAll(year) {
             // Update Displays
             const adEl = document.getElementById('display-ad');
             const eraEl = document.getElementById('display-era');
-            if (adEl) adEl.textContent = data.year + labels.form_year_suffix;
-            if (eraEl) eraEl.textContent = data.era;
+
+            const adText = data.year + labels.form_year_suffix;
+            if (adEl) {
+                 adEl.textContent = adText;
+                 const parent = adEl.parentNode;
+                 const btn = parent.querySelector('button');
+                 if (btn) btn.setAttribute('onclick', `event.stopPropagation(); window.copyToClipboard('${adText}', this)`);
+            }
+            if (eraEl) {
+                eraEl.textContent = data.era;
+                const parent = eraEl.parentNode;
+                const btn = parent.querySelector('button');
+                if (btn) btn.setAttribute('onclick', `event.stopPropagation(); window.copyToClipboard('${data.era}', this)`);
+            }
 
             // Update Trivia Container
             renderTrivia(data.trivia);
@@ -288,7 +300,7 @@ function renderTrivia(trivia) {
       <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md">
         <div class="flex items-center gap-2 mb-4">
             <span class="bg-pink-100 text-pink-600 p-2 rounded-full h-10 w-10 flex items-center justify-center text-xl">🎵</span>
-            <h3 class="font-bold text-xl text-slate-800">${triviaLabels.songs_title}</h3>
+            <h3 class="font-bold text-slate-800">${triviaLabels.songs_title}</h3>
         </div>
         <ul class="text-left text-slate-700 list-disc list-inside space-y-2 ml-1">
           ${songsHtml}

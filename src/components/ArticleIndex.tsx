@@ -1,5 +1,6 @@
 import { Layout } from "./Layout";
 import { ArticleCard } from "./ArticleCard";
+import { Breadcrumbs } from "./Breadcrumbs";
 import { Article } from "../data/articles";
 import { Translation } from "../locales/types";
 
@@ -12,6 +13,12 @@ interface ArticleIndexProps {
 }
 
 export const ArticleIndex = ({ articles, lang, dict, path, env }: ArticleIndexProps) => {
+  const getLink = (p: string) => lang === 'ja' ? p : `/${lang}${p}`;
+  const breadcrumbItems = [
+    { label: dict.nav.home, path: getLink('/') },
+    { label: dict.nav.columns, path: path }
+  ];
+
   return (
     <Layout
       title="コラム一覧"
@@ -25,6 +32,7 @@ export const ArticleIndex = ({ articles, lang, dict, path, env }: ArticleIndexPr
         <div className="min-h-full flex flex-col items-center justify-start pt-8 pb-12 px-4">
 
           <div className="w-full max-w-3xl mb-8">
+            <Breadcrumbs items={breadcrumbItems} />
             <h1 className="text-2xl font-bold text-[#22215B] mb-2 text-center">コラム一覧</h1>
             <p className="text-center text-slate-500 text-sm">西暦・和暦に関する豆知識や更新情報</p>
           </div>

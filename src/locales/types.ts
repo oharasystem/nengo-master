@@ -7,8 +7,13 @@ export type Translation = {
   header: {
     title: string;
   };
+  common: {
+    copied: string;
+  };
   nav: {
     hub: string;
+    home: string;
+    columns: string;
   };
   home: {
     label_ad: string;
