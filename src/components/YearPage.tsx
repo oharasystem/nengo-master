@@ -79,10 +79,15 @@ export const YearPage = (props: Props) => {
 
                     {/* Header */}
                     <header class="text-center py-8">
-                        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-2 flex items-center justify-center gap-3">
-                            <span class="text-[#22215B]">{year}{dict.home.form_year_suffix}</span>
-                            <span class="text-lg sm:text-2xl font-normal text-slate-600">({era})</span>
-                            <CopyButton text={`${year}${dict.home.form_year_suffix} (${era})`} />
+                        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[#22215B]">{year}{dict.home.form_year_suffix}</span>
+                                <CopyButton text={`${year}${dict.home.form_year_suffix}`} />
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg sm:text-2xl font-normal text-slate-600">({era})</span>
+                                <CopyButton text={era} />
+                            </div>
                         </h1>
 
                         {/* Era Transition Alert (JA Only) */}
