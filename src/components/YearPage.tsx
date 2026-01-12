@@ -3,6 +3,7 @@ import { TriviaCard } from "./TriviaCard";
 import { getZodiac, getSexagenaryCycle } from "../utils/zodiac";
 import { getYakudoshi } from "../utils/yakudoshi";
 import { calculateResume } from "../utils/resume";
+import { getLifeEvents } from "../utils/lifeEvents";
 import { getEraTransitionAlert } from "../utils/era";
 import { Translation } from "../locales/types";
 
@@ -30,6 +31,7 @@ export const YearPage = (props: Props) => {
     // Extended logic for JA
     const eraAlert = lang === 'ja' ? getEraTransitionAlert(year) : null;
     const sexagenaryCycle = lang === 'ja' ? getSexagenaryCycle(year) : null;
+    const lifeEvents = lang === 'ja' ? getLifeEvents(year) : [];
 
     // Links
     const prevYear = year - 1;
@@ -240,6 +242,42 @@ export const YearPage = (props: Props) => {
                             });
                         `}} />
                     </section>
+
+                    {/* Life Milestones (JA Only) */}
+                    {lang === 'ja' && lifeEvents.length > 0 && (
+                        <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="bg-slate-100 text-[#22215B] p-2 rounded-full">🎉</span>
+                                <h2 class="font-bold text-xl text-slate-800">人生の節目・長寿のお祝い</h2>
+                            </div>
+
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left text-slate-600">
+                                    <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                                        <tr>
+                                            <th class="px-4 py-3 rounded-l-lg">年齢</th>
+                                            <th class="px-4 py-3">出来事</th>
+                                            <th class="px-4 py-3 rounded-r-lg">その年</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {lifeEvents.map((event, index) => {
+                                            const isPast = event.year < currentYear;
+                                            return (
+                                                <tr key={index} class={`border-b border-slate-100 last:border-0 hover:bg-slate-50 transition ${isPast ? 'text-slate-400' : ''}`}>
+                                                    <td class="px-4 py-3 font-bold">満{event.age}歳</td>
+                                                    <td class={`px-4 py-3 font-bold ${isPast ? 'text-slate-400' : 'text-slate-800'}`}>{event.label}</td>
+                                                    <td class={`px-4 py-3 ${isPast ? '' : 'text-[#22215B] font-medium'}`}>
+                                                        {event.year}年 <span class="text-xs">({event.wareki})</span>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    )}
 
                     {/* Related Links */}
                     <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
