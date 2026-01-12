@@ -6,6 +6,7 @@ export const resumeSeirekiWarekiGuide: Article = {
   title: '【履歴書】西暦・和暦どっちが正解？採用担当が教える書き方マナーと年号早見表',
   excerpt: '履歴書作成時の年号の迷いを解消。西暦・和暦の統一ルール、早見表、そして面倒な計算をなくす自動ツールの活用法を解説します。',
   publishDate: '2026-01-13',
+  category: 'resume',
   content: (
     <>
       <p className="mb-4">
