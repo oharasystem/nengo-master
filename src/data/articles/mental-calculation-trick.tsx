@@ -6,6 +6,7 @@ export const mentalCalculationTrick: Article = {
   title: '「今、令和何年？」西暦⇔和暦を一瞬で変換する暗算テクニック',
   excerpt: 'スマホを見る前に3秒で解決！西暦から令和・平成・昭和を導き出す「魔法の数字」を紹介します。',
   publishDate: '2026-01-13',
+  category: 'calc',
   content: (
     <>
       <p className="mb-4">

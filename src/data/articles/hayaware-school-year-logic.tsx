@@ -6,6 +6,7 @@ export const hayawareSchoolYear: Article = {
   title: '早生まれ（1/1〜4/1）はなぜ「前の学年」？履歴書で間違えないための必須知識',
   excerpt: '4月1日生まれは早生まれ？4月2日からは次の学年？ややこしい「早生まれ」の仕組みと、履歴書記入時の注意点を解説します。',
   publishDate: '2026-01-13',
+  category: 'knowledge',
   content: (
     <>
       <p className="mb-4">
