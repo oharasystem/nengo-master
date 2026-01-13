@@ -11,6 +11,7 @@ import { ArticleIndex } from "./components/ArticleIndex";
 import { ArticlePage } from "./components/ArticlePage";
 import { ArticleCard } from "./components/ArticleCard";
 import { CopyButton } from "./components/CopyButton";
+import { ShareButtons } from "./components/ShareButtons";
 import { getEra } from "./utils/era";
 import { calculateResume } from "./utils/resume";
 import { HISTORY_TIMELINE } from "./const/historyTimeline";
@@ -162,6 +163,16 @@ const homeHandler = async (c: any) => {
                         </div>
                     </div>
 
+                {/* Share Buttons (Dynamic) */}
+                <div class="w-full max-w-3xl mb-8 flex justify-end">
+                    <ShareButtons
+                        title={dict.meta.title}
+                        text={lang === 'ja' ? `西暦${INITIAL_YEAR}年は${initialData.era}です。 #年号マスター` : `AD ${INITIAL_YEAR} is ${initialData.era}.`}
+                        url={c.env?.ENVIRONMENT === 'production' ? 'https://nengomaster.com' : 'http://localhost:8787'}
+                        idPrefix="home-"
+                    />
+                </div>
+
                     {/* Trivia Card (Main Screen) */}
                     <div class="w-full max-w-3xl mb-8">
                         <TriviaCard trivia={initialData.trivia} era={initialData.era} dict={dict} />
@@ -195,7 +206,15 @@ const homeHandler = async (c: any) => {
                             </button>
                         </form>
                         <div id="resume-result" class="mt-4 hidden bg-white p-4 rounded-lg shadow border border-slate-100">
-                            <ul class="text-left text-sm space-y-2" id="resume-list"></ul>
+                        <ul class="text-left text-sm space-y-2 mb-4" id="resume-list"></ul>
+                         <div class="flex justify-center pt-2 border-t border-slate-100">
+                             <ShareButtons
+                                title={dict.meta.title}
+                                text={lang === 'ja' ? `西暦${INITIAL_YEAR}年は${initialData.era}です。 #年号マスター` : `AD ${INITIAL_YEAR} is ${initialData.era}.`}
+                                url={c.env?.ENVIRONMENT === 'production' ? 'https://nengomaster.com' : 'http://localhost:8787'}
+                                idPrefix="resume-"
+                            />
+                        </div>
                         </div>
                     </div>
 
@@ -347,6 +366,8 @@ const ageDetailHandler = async (c: any) => {
             dict={dict}
             path={`/age/${age}`}
             env={c.env?.ENVIRONMENT}
+            mode="age"
+            targetAge={age}
         />).toString()
     );
 };

@@ -1,6 +1,7 @@
 import { Layout } from "./Layout";
 import { TriviaCard } from "./TriviaCard";
 import { CopyButton } from "./CopyButton";
+import { ShareButtons } from "./ShareButtons";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { getZodiac, getSexagenaryCycle } from "../utils/zodiac";
 import { getYakudoshi } from "../utils/yakudoshi";
@@ -21,10 +22,12 @@ type Props = {
     dict: Translation;
     path: string;
     env?: string;
+    mode?: 'year' | 'age';
+    targetAge?: number;
 };
 
 export const YearPage = (props: Props) => {
-    const { year, currentYear, era, trivia, lang, dict, path, env } = props;
+    const { year, currentYear, era, trivia, lang, dict, path, env, mode = 'year', targetAge } = props;
     const age = currentYear - year;
     const zodiac = getZodiac(year);
     const yakudoshi = getYakudoshi(year, currentYear);
@@ -41,8 +44,13 @@ export const YearPage = (props: Props) => {
     const sameZodiacPrev = year - 12;
     const sameZodiacNext = year + 12;
 
-    const title = `${year}年（${era}）生まれ - 年齢・厄年・早見表`; // TODO: Translate titles if needed later, kept as is for now as scope is top page focused mostly
-    const description = `${year}年（${era}）生まれの人の現在の年齢は${age}歳です。干支は${zodiac.kanji}（${zodiac.jyunishi.kana}）です。入学・卒業年度、厄年の確認、当時の出来事やヒット曲も振り返ります。`;
+    let title = `${year}年（${era}）生まれ - 年齢・厄年・早見表`;
+    let description = `${year}年（${era}）生まれの人の現在の年齢は${age}歳です。干支は${zodiac.kanji}（${zodiac.jyunishi.kana}）です。入学・卒業年度、厄年の確認、当時の出来事やヒット曲も振り返ります。`;
+
+    if (mode === 'age' && targetAge !== undefined) {
+        title = `${targetAge}歳（${year}年生まれ）の年表・厄年・早見表`;
+        description = `現在${targetAge}歳の方（${year}年・${era}生まれ）向けの年表ページです。干支、入学・卒業年度、厄年、その年に起きた出来事や流行歌などをまとめています。`;
+    }
 
     // JSON-LD
     const jsonLd = {
@@ -98,6 +106,13 @@ export const YearPage = (props: Props) => {
                             </div>
                         )}
 
+                        <ShareButtons
+                            title={title}
+                            text={lang === 'ja' ? `西暦${year}年は${era}です。 #年号マスター` : `AD ${year} is ${era}.`}
+                            url={env === 'production' ? `https://nengomaster.com${path}` : `http://localhost:8787${path}`}
+                            className="justify-center mb-6"
+                        />
+
                         <p class="text-lg font-bold text-slate-700 mb-2">
                             {dict.year_page.age_label}
                         </p>
@@ -120,10 +135,17 @@ export const YearPage = (props: Props) => {
                     {/* Intro Section - JA Only */}
                     {lang === 'ja' && (
                         <div class="text-sm text-slate-600 leading-relaxed mb-6">
-                            <p>
-                                西暦{year}年は、和暦では{era}です。干支は{zodiac.kanji}（{zodiac.jikkan.kana}{zodiac.jyunishi.kana}）にあたります。<br />
-                                このページでは、{year}年生まれの方の年齢早見表や、入学・卒業年度、その年に起きた主な出来事などをまとめています。
-                            </p>
+                            {mode === 'age' && targetAge !== undefined ? (
+                                <p>
+                                    現在{targetAge}歳の方は、西暦{year}年（{era}）生まれです。干支は{zodiac.kanji}（{zodiac.jikkan.kana}{zodiac.jyunishi.kana}）にあたります。<br />
+                                    このページでは、{targetAge}歳の方の入学・卒業年度や厄年、生まれた年に起きた主な出来事などをまとめています。
+                                </p>
+                            ) : (
+                                <p>
+                                    西暦{year}年は、和暦では{era}です。干支は{zodiac.kanji}（{zodiac.jikkan.kana}{zodiac.jyunishi.kana}）にあたります。<br />
+                                    このページでは、{year}年生まれの方の年齢早見表や、入学・卒業年度、その年に起きた主な出来事などをまとめています。
+                                </p>
+                            )}
                         </div>
                     )}
 
