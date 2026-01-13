@@ -14,6 +14,7 @@ import { CopyButton } from "./components/CopyButton";
 import { ShareButtons } from "./components/ShareButtons";
 import { getEra } from "./utils/era";
 import { calculateResume } from "./utils/resume";
+import { getBaseUrl } from "./utils/url";
 import { HISTORY_TIMELINE } from "./const/historyTimeline";
 import { articles } from "./data/articles";
 
@@ -168,7 +169,7 @@ const homeHandler = async (c: any) => {
                     <ShareButtons
                         title={dict.meta.title}
                         text={lang === 'ja' ? `西暦${INITIAL_YEAR}年は${initialData.era}です。 #年号マスター` : `AD ${INITIAL_YEAR} is ${initialData.era}.`}
-                        url={c.env?.ENVIRONMENT === 'production' ? 'https://nengomaster.com' : 'http://localhost:8787'}
+                        url={getBaseUrl(c.env?.ENVIRONMENT)}
                         idPrefix="home-"
                     />
                 </div>
@@ -211,7 +212,7 @@ const homeHandler = async (c: any) => {
                              <ShareButtons
                                 title={dict.meta.title}
                                 text={lang === 'ja' ? `西暦${INITIAL_YEAR}年は${initialData.era}です。 #年号マスター` : `AD ${INITIAL_YEAR} is ${initialData.era}.`}
-                                url={c.env?.ENVIRONMENT === 'production' ? 'https://nengomaster.com' : 'http://localhost:8787'}
+                                url={getBaseUrl(c.env?.ENVIRONMENT)}
                                 idPrefix="resume-"
                             />
                         </div>

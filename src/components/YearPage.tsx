@@ -8,6 +8,7 @@ import { getYakudoshi } from "../utils/yakudoshi";
 import { calculateResume } from "../utils/resume";
 import { getLifeEvents } from "../utils/lifeEvents";
 import { getEraTransitionAlert } from "../utils/era";
+import { getBaseUrl } from "../utils/url";
 import { Translation } from "../locales/types";
 
 type Props = {
@@ -109,7 +110,7 @@ export const YearPage = (props: Props) => {
                         <ShareButtons
                             title={title}
                             text={lang === 'ja' ? `西暦${year}年は${era}です。 #年号マスター` : `AD ${year} is ${era}.`}
-                            url={env === 'production' ? `https://nengomaster.com${path}` : `http://localhost:8787${path}`}
+                            url={getBaseUrl(env, path)}
                             className="justify-center mb-6"
                         />
 

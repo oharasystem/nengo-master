@@ -1,4 +1,5 @@
 import { html, raw } from "hono/html";
+import { PRODUCTION_URL } from "../utils/url";
 
 type BreadcrumbItem = {
     label: string;
@@ -12,7 +13,7 @@ type Props = {
 export const Breadcrumbs = ({ items }: Props) => {
     // Helper to get origin - ideally should be from env/context but for now consistent with Layout.tsx
     // In a real scenario, this should be passed from the request context or env vars.
-    const origin = "https://nengo-master.o-lab.workers.dev";
+    const origin = PRODUCTION_URL;
 
     // Generate JSON-LD
     const jsonLd = {

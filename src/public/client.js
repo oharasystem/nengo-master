@@ -322,7 +322,7 @@ function createListHtml(items) {
 function updateShareButtons(year, era) {
     // Current URL (assumed top page or canonical root)
     // We will use the canonical origin for sharing if possible, or just current.
-    const url = window.location.origin; // e.g. https://nengomaster.com
+    const url = window.location.origin;
 
     // Construct text
     // "西暦2026年は令和8年です。 #年号マスター"

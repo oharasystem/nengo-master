@@ -3,6 +3,7 @@ import { Breadcrumbs } from "./Breadcrumbs";
 import { ShareButtons } from "./ShareButtons";
 import { Article } from "../data/articles";
 import { Translation } from "../locales/types";
+import { getBaseUrl } from "../utils/url";
 
 interface ArticlePageProps {
   article: Article;
@@ -47,7 +48,7 @@ export const ArticlePage = ({ article, lang, dict, path, env }: ArticlePageProps
                 <ShareButtons
                     title={article.title}
                     text={`${article.title} | 年号マスター`}
-                    url={env === 'production' ? `https://nengomaster.com${path}` : `http://localhost:8787${path}`}
+                    url={getBaseUrl(env, path)}
                 />
             </header>
 
