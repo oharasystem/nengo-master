@@ -272,6 +272,9 @@ function updateAll(year) {
                 if (btn) btn.setAttribute('onclick', `event.stopPropagation(); window.copyToClipboard('${data.era}', this)`);
             }
 
+            // Update Share Buttons
+            updateShareButtons(data.year, data.era);
+
             // Update Trivia Container
             renderTrivia(data.trivia);
         })
@@ -314,4 +317,34 @@ function createListHtml(items) {
         return `<li class="list-none text-slate-400">${triviaLabels.empty}</li>`;
     }
     return items.map(item => `<li>${item}</li>`).join('');
+}
+
+function updateShareButtons(year, era) {
+    // Current URL (assumed top page or canonical root)
+    // We will use the canonical origin for sharing if possible, or just current.
+    const url = window.location.origin; // e.g. https://nengomaster.com
+
+    // Construct text
+    // "西暦2026年は令和8年です。 #年号マスター"
+    // "AD 2026 is Reiwa 8. #YearMaster" (if English was main, but currently logic is mostly JA focused for the share text requirement)
+    // We'll stick to Japanese format as requested or simple English if we can detect lang (not easily available in client.js without config).
+    // The requirement said: "Top page/Year page case: 'AD 2026 is Reiwa 8...'. Layout: Inside the calculation result card".
+    // "西暦2026年は令和8年です。 #年号マスター"
+    const text = `西暦${year}年は${era}です。 #年号マスター`;
+
+    const encodedText = encodeURIComponent(text);
+    const encodedUrl = encodeURIComponent(url);
+
+    const xUrl = `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+    const lineUrl = `https://line.me/R/msg/text/?${encodedText}%20${encodedUrl}`;
+
+    // Select all X buttons with id starting with 'home-share-x' or 'resume-share-x'
+    // We gave them IDs like `home-share-x`, `resume-share-x`.
+    ['home-', 'resume-'].forEach(prefix => {
+        const btnX = document.getElementById(prefix + 'share-x');
+        const btnLine = document.getElementById(prefix + 'share-line');
+
+        if (btnX) btnX.setAttribute('href', xUrl);
+        if (btnLine) btnLine.setAttribute('href', lineUrl);
+    });
 }

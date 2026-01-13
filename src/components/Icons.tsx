@@ -94,3 +94,26 @@ export const Sparkles = ({ className }: { className?: string }) => (
     <circle cx="4" cy="20" r="2" />
   </svg>
 );
+
+export const TwitterX = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+  >
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
+
+export const Line = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+  >
+    <path d="M21.5 10.1c0-4.4-4.3-8-9.5-8s-9.5 3.6-9.5 8c0 3.9 3.5 7.2 8.1 7.9.4.1.9.3 1 .8l.3 1.8c.1.5.5.6.9.3 4-2.3 8.5-6 8.7-10.8z" />
+    <path fill="#fff" d="M16.6 12.8H15v-2.8h1.6c.3 0 .5-.2.5-.5s-.2-.5-.5-.5h-2.6v4.8h2.6c.3 0 .5-.2.5-.5s-.2-.5-.5-.5zm-4.3 0h-1.6v-2.8h1.6c.3 0 .5-.2.5-.5s-.2-.5-.5-.5H9.7v4.8h2.6c.3 0 .5-.2.5-.5s-.2-.5-.5-.5zm-4.4-3.8h-1v4.8h1v-4.8zm-2.8 0h-1v3.3l-1.9-3.3h-.9v4.8h1v-3.3l1.9 3.3h.9v-4.8z" />
+  </svg>
+);

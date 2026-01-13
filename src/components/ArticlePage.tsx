@@ -1,5 +1,6 @@
 import { Layout } from "./Layout";
 import { Breadcrumbs } from "./Breadcrumbs";
+import { ShareButtons } from "./ShareButtons";
 import { Article } from "../data/articles";
 import { Translation } from "../locales/types";
 
@@ -40,9 +41,14 @@ export const ArticlePage = ({ article, lang, dict, path, env }: ArticlePageProps
                 <div className="text-sm text-slate-400 font-bold mb-3">
                     {article.publishDate.replaceAll('-', '.')}
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-[#22215B] leading-tight">
+                <h1 className="text-2xl sm:text-3xl font-bold text-[#22215B] leading-tight mb-4">
                     {article.title}
                 </h1>
+                <ShareButtons
+                    title={article.title}
+                    text={`${article.title} | 年号マスター`}
+                    url={env === 'production' ? `https://nengomaster.com${path}` : `http://localhost:8787${path}`}
+                />
             </header>
 
             <div className="prose prose-slate max-w-none text-slate-700 leading-relaxed">
