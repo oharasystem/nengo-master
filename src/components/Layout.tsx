@@ -186,7 +186,7 @@ export const Layout = (props: Props) => {
             }
         </script>
       </head>
-      <body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-hidden h-screen w-screen flex flex-col">
+      <body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-hidden h-[100dvh] w-screen flex flex-col">
           <header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 h-14 flex-none">
               <div class="h-full w-full max-w-4xl mx-auto px-4 flex items-center justify-center">
                   <a href="${lang === 'ja' ? '/' : '/' + lang + '/'}" class="text-xl font-extrabold text-[#22215B] hover:opacity-80 transition flex items-center gap-2">
