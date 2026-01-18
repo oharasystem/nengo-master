@@ -1,5 +1,5 @@
 // URL Constants
-export const PRODUCTION_URL = 'https://nengo-master.o-lab.workers.dev';
+export const PRODUCTION_URL = 'https://nengo.solooo.dev';
 export const DEVELOPMENT_URL = 'http://localhost:8787';
 
 /**
