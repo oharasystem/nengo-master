@@ -6,6 +6,10 @@ import { hayawareSchoolYear } from "./articles/hayaware-school-year-logic";
 import { yakudoshiGuide } from "./articles/yakudoshi-guide";
 import { eraTransitionGuide } from "./articles/eraTransition-guide";
 import { ageSystemGuide } from "./articles/ageSystem-guide";
+import { sexagenaryCycleMystery } from "./articles/sexagenary-cycle-mystery";
+import { businessDateManner } from "./articles/business-date-manner";
+import { gengoHistoryJP } from "./articles/gengo-history-jp";
+import { futureEraPrediction } from "./articles/future-era-prediction";
 
 export type { Article };
 
@@ -17,6 +21,10 @@ const allArticles: Article[] = [
   yakudoshiGuide,
   eraTransitionGuide,
   ageSystemGuide,
+  sexagenaryCycleMystery,
+  businessDateManner,
+  gengoHistoryJP,
+  futureEraPrediction,
 ];
 
 export const articles: Article[] = allArticles.sort((a, b) => {
