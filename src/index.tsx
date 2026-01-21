@@ -117,7 +117,7 @@ const homeHandler = async (c: any) => {
     }
 
     const content = (
-        <Layout title={dict.meta.title} description={dict.meta.description} keywords={dict.meta.keywords} lang={lang} dict={dict} path="/" env={c.env?.ENVIRONMENT}>
+        <Layout title={dict.meta.title} description={dict.meta.description} keywords={dict.meta.keywords} lang={lang} dict={dict} path="/" env={c.env?.ENVIRONMENT} googleAdSenseId={c.env?.GOOGLE_ADSENSE_ID}>
             <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">
                 <div class="min-h-full flex flex-col items-center justify-start pt-8 pb-4 px-4">
 
@@ -301,7 +301,7 @@ const yearsHandler = (c: any) => {
         lang = getLangFromPath(c.req.path);
     }
     const dict = getDict(lang);
-    return c.html((<YearIndex startYear={START_YEAR} endYear={END_YEAR} lang={lang} dict={dict} path="/years" env={c.env?.ENVIRONMENT} />).toString());
+    return c.html((<YearIndex startYear={START_YEAR} endYear={END_YEAR} lang={lang} dict={dict} path="/years" env={c.env?.ENVIRONMENT} googleAdSenseId={c.env?.GOOGLE_ADSENSE_ID} />).toString());
 };
 
 const yearDetailHandler = async (c: any) => {
@@ -329,6 +329,7 @@ const yearDetailHandler = async (c: any) => {
             dict={dict}
             path={`/year/${year}`}
             env={c.env?.ENVIRONMENT}
+            googleAdSenseId={c.env?.GOOGLE_ADSENSE_ID}
         />).toString()
     );
 };
@@ -369,6 +370,7 @@ const ageDetailHandler = async (c: any) => {
             env={c.env?.ENVIRONMENT}
             mode="age"
             targetAge={age}
+            googleAdSenseId={c.env?.GOOGLE_ADSENSE_ID}
         />).toString()
     );
 };
@@ -379,7 +381,7 @@ const privacyHandler = (c: any) => {
         lang = getLangFromPath(c.req.path);
     }
     const dict = getDict(lang);
-    return c.html((<PrivacyPage lang={lang} dict={dict} path="/privacy" env={c.env?.ENVIRONMENT} />).toString());
+    return c.html((<PrivacyPage lang={lang} dict={dict} path="/privacy" env={c.env?.ENVIRONMENT} googleAdSenseId={c.env?.GOOGLE_ADSENSE_ID} />).toString());
 };
 
 const contactHandler = (c: any) => {
@@ -388,7 +390,7 @@ const contactHandler = (c: any) => {
         lang = getLangFromPath(c.req.path);
     }
     const dict = getDict(lang);
-    return c.html((<ContactPage lang={lang} dict={dict} path="/contact" env={c.env?.ENVIRONMENT} />).toString());
+    return c.html((<ContactPage lang={lang} dict={dict} path="/contact" env={c.env?.ENVIRONMENT} googleAdSenseId={c.env?.GOOGLE_ADSENSE_ID} />).toString());
 };
 
 const articlesHandler = (c: any) => {
@@ -399,7 +401,7 @@ const articlesHandler = (c: any) => {
         lang = getLangFromPath(c.req.path);
     }
     const dict = getDict(lang);
-    return c.html((<ArticleIndex articles={articles} lang={lang} dict={dict} path="/articles" env={c.env?.ENVIRONMENT} />).toString());
+    return c.html((<ArticleIndex articles={articles} lang={lang} dict={dict} path="/articles" env={c.env?.ENVIRONMENT} googleAdSenseId={c.env?.GOOGLE_ADSENSE_ID} />).toString());
 };
 
 const articleDetailHandler = (c: any) => {
@@ -415,7 +417,7 @@ const articleDetailHandler = (c: any) => {
     }
     const dict = getDict(lang);
 
-    return c.html((<ArticlePage article={article} lang={lang} dict={dict} path={`/articles/${slug}`} env={c.env?.ENVIRONMENT} />).toString());
+    return c.html((<ArticlePage article={article} lang={lang} dict={dict} path={`/articles/${slug}`} env={c.env?.ENVIRONMENT} googleAdSenseId={c.env?.GOOGLE_ADSENSE_ID} />).toString());
 };
 
 // --- Route Registration ---

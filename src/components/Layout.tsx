@@ -14,12 +14,13 @@ type Props = {
     dict: Translation;
     path: string;
     env?: string;
+    googleAdSenseId?: string;
 };
 
 const SUPPORTED_LANGS = ['ja', 'en', 'zh', 'vi', 'ko', 'pt', 'es'];
 
 export const Layout = (props: Props) => {
-    const { lang, dict, path, env } = props;
+    const { lang, dict, path, env, googleAdSenseId } = props;
 
     // Helper to generate alternate links
     // path comes as e.g. "/year/2024" or "/"
@@ -77,6 +78,8 @@ export const Layout = (props: Props) => {
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="robots" content="index, follow" />
+
+        ${googleAdSenseId ? html`<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdSenseId}" crossorigin="anonymous"></script>` : ''}
 
         ${env === 'production' ? html`
         <!-- Google tag (gtag.js) -->

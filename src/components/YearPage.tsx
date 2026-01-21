@@ -25,10 +25,11 @@ type Props = {
     env?: string;
     mode?: 'year' | 'age';
     targetAge?: number;
+    googleAdSenseId?: string;
 };
 
 export const YearPage = (props: Props) => {
-    const { year, currentYear, era, trivia, lang, dict, path, env, mode = 'year', targetAge } = props;
+    const { year, currentYear, era, trivia, lang, dict, path, env, mode = 'year', targetAge, googleAdSenseId } = props;
     const age = currentYear - year;
     const zodiac = getZodiac(year);
     const yakudoshi = getYakudoshi(year, currentYear);
@@ -78,7 +79,7 @@ export const YearPage = (props: Props) => {
     ];
 
     return (
-        <Layout title={title} description={description} lang={lang} dict={dict} path={path} env={env}>
+        <Layout title={title} description={description} lang={lang} dict={dict} path={path} env={env} googleAdSenseId={googleAdSenseId}>
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
             <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">

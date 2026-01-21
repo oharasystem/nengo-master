@@ -7,14 +7,15 @@ type Props = {
     dict: Translation;
     path: string;
     env?: string;
+    googleAdSenseId?: string;
 };
 
 export const ContactPage = (props: Props) => {
-    const { lang, dict, path, env } = props;
+    const { lang, dict, path, env, googleAdSenseId } = props;
 
     // Content is hardcoded in Japanese as per requirements
     return (
-        <Layout title="お問い合わせ" description="お問い合わせ" lang={lang} dict={dict} path={path} env={env}>
+        <Layout title="お問い合わせ" description="お問い合わせ" lang={lang} dict={dict} path={path} env={env} googleAdSenseId={googleAdSenseId}>
             <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">
                 <div class="min-h-full flex flex-col items-center justify-start pt-8 pb-12 px-4">
                     <div class="w-full max-w-3xl bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
