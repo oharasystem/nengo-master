@@ -449,7 +449,12 @@ app.get("/this-year", (c) => c.redirect(`/year/${getCurrentYear()}`));
 app.get("/next-year", (c) => c.redirect(`/year/${getCurrentYear() + 1}`));
 app.get("/last-year", (c) => c.redirect(`/year/${getCurrentYear() - 1}`));
 
-// 6. Sitemap
+// 6. ads.txt
+app.get("/ads.txt", (c) => {
+    return c.text("google.com, pub-3860710971355910, DIRECT, f08c47fec0942fa0");
+});
+
+// 7. Sitemap
 app.get("/sitemap.xml", (c) => {
     const baseUrl = new URL(c.req.url).origin;
 

@@ -139,4 +139,12 @@ describe('App Integration', () => {
     expect(text).toContain('年号マスターを開設しました')
     expect(text).toContain('サイトの目的')
   })
+
+  it('GET /ads.txt should return 200 and correct content', async () => {
+    const res = await app.request('/ads.txt')
+    expect(res.status).toBe(200)
+    expect(res.headers.get('Content-Type')).toContain('text/plain')
+    const text = await res.text()
+    expect(text).toBe('google.com, pub-3860710971355910, DIRECT, f08c47fec0942fa0')
+  })
 })
