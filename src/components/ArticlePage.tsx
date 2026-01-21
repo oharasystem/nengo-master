@@ -11,9 +11,10 @@ interface ArticlePageProps {
   dict: Translation;
   path: string;
   env?: string;
+  googleAdSenseId?: string;
 }
 
-export const ArticlePage = ({ article, lang, dict, path, env }: ArticlePageProps) => {
+export const ArticlePage = ({ article, lang, dict, path, env, googleAdSenseId }: ArticlePageProps) => {
   const getLink = (p: string) => lang === 'ja' ? p : `/${lang}${p}`;
   const breadcrumbItems = [
     { label: dict.nav.home, path: getLink('/') },
@@ -29,6 +30,7 @@ export const ArticlePage = ({ article, lang, dict, path, env }: ArticlePageProps
       dict={dict}
       path={path}
       env={env}
+      googleAdSenseId={googleAdSenseId}
     >
       <div className="flex-1 w-full relative overflow-y-auto bg-slate-50">
         <div className="min-h-full flex flex-col items-center justify-start pt-8 pb-12 px-4">

@@ -8,3 +8,4 @@ directory = "./src/public"
 
 [vars]
 ENVIRONMENT = "production"
+GOOGLE_ADSENSE_ID = "ca-pub-3860710971355910"
