@@ -5,7 +5,7 @@ export const eraTransitionGuide: Article = {
   slug: 'era-transition-boundary-guide',
   title: '【改元】「平成31年」と「令和元年」の境界線は？契約書・履歴書で失敗しない公的知識',
   excerpt: '4月30日は平成？5月1日は令和？契約書の日付や「元年」表記のルールなど、ビジネスや公的手続きで恥をかかないための正確な知識を解説します。',
-  publishDate: '2026-01-21',
+  publishDate: '2026-02-02',
   category: 'knowledge',
   content: (
     <>
