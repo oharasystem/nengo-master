@@ -16,7 +16,8 @@ import { getEra } from "./utils/era";
 import { calculateResume } from "./utils/resume";
 import { getBaseUrl } from "./utils/url";
 import { HISTORY_TIMELINE } from "./const/historyTimeline";
-import { articles } from "./data/articles";
+import { articles, allArticlesIncludingDraft } from "./data/articles";
+import { isPublished } from "./utils/articleFilter";
 
 // Locales
 import ja from "./locales/ja";
@@ -404,8 +405,11 @@ const articlesHandler = (c: any) => {
 
 const articleDetailHandler = (c: any) => {
     const slug = c.req.param('slug');
-    const article = articles.find(a => a.slug === slug);
-    if (!article) {
+    // 全記事（未公開含む）から検索
+    const article = allArticlesIncludingDraft.find(a => a.slug === slug);
+    
+    // 記事が存在しない、または未公開の場合は404
+    if (!article || !isPublished(article.publishDate)) {
         return c.notFound();
     }
 

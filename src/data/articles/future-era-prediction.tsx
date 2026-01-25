@@ -5,7 +5,7 @@ export const futureEraPrediction: Article = {
   slug: 'future-year-prediction-reiwa',
   title: '【未来予測】2030年、2050年は「令和何年」？和暦で読み解く未来のシナリオ',
   excerpt: 'SDGsの2030年、脱炭素の2050年。遠い未来の話に見えますが、和暦（令和）に変換すると「意外とすぐそこ」だと気づくはずです。',
-  publishDate: '2026-01-21',
+  publishDate: '2026-02-09',
   category: 'knowledge',
   content: (
     <>

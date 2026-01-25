@@ -10,6 +10,7 @@ import { sexagenaryCycleMystery } from "./articles/sexagenary-cycle-mystery";
 import { businessDateManner } from "./articles/business-date-manner";
 import { gengoHistoryJP } from "./articles/gengo-history-jp";
 import { futureEraPrediction } from "./articles/future-era-prediction";
+import { getPublishedArticles } from "../utils/articleFilter";
 
 export type { Article };
 
@@ -27,6 +28,13 @@ const allArticles: Article[] = [
   futureEraPrediction,
 ];
 
-export const articles: Article[] = allArticles.sort((a, b) => {
+// 公開日でソートした全記事（未公開含む）
+const sortedAllArticles: Article[] = allArticles.sort((a, b) => {
   return new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime();
 });
+
+// 公開済み記事のみをエクスポート
+export const articles: Article[] = getPublishedArticles(sortedAllArticles);
+
+// 未公開記事も含めた全記事（特定記事の存在確認用）
+export const allArticlesIncludingDraft: Article[] = sortedAllArticles;

@@ -5,7 +5,7 @@ export const siteOpened: Article = {
   slug: 'site-opened',
   title: '年号マスターを開設しました',
   excerpt: '西暦・和暦の変換ツール「年号マスター」を公開しました。便利な機能を紹介します。',
-  publishDate: '2024-05-20',
+  publishDate: '2026-01-08',
   category: 'other',
   content: (
     <>

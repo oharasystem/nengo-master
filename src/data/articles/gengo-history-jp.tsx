@@ -5,7 +5,7 @@ export const gengoHistoryJP: Article = {
   slug: 'history-of-japanese-gengo',
   title: '【大人の教養】世界で日本だけ？1400年続く「元号」の歴史と、コロコロ変わっていた意外な理由',
   excerpt: '「大化」から「令和」まで248個。かつては災害ですぐに改元していた？明治以前のルールや、昭和・平成・令和の由来を日本史講師が解説します。',
-  publishDate: '2026-01-21',
+  publishDate: '2026-02-16',
   category: 'history',
   content: (
     <>

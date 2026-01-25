@@ -5,7 +5,7 @@ export const businessDateManner: Article = {
   slug: 'business-date-manner-ad-vs-jp',
   title: '【新社会人必見】メールの日付は西暦？和暦？業界別「年号使い分け」の鉄則マナー',
   excerpt: 'IT企業は西暦、お役所は和暦？ビジネス文書で恥をかかないための使い分けルールと、やってはいけない「混在」のリスクを解説します。',
-  publishDate: '2026-01-21',
+  publishDate: '2026-01-26',
   category: 'knowledge',
   content: (
     <>
