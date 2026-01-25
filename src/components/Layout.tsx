@@ -113,7 +113,7 @@ export const Layout = (props: Props) => {
 
         <!-- Structured Data (JSON-LD) -->
         <script type="application/ld+json">
-          ${JSON.stringify({
+          ${raw(JSON.stringify({
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": dict.header.title,
@@ -126,7 +126,7 @@ export const Layout = (props: Props) => {
             "price": "0",
             "priceCurrency": "JPY"
         }
-    })}
+    }))}
         </script>
 
         <script src="https://cdn.tailwindcss.com"></script>

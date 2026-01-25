@@ -1,4 +1,3 @@
-import { html, raw } from "hono/html";
 import { PRODUCTION_URL } from "../utils/url";
 
 type BreadcrumbItem = {
@@ -29,9 +28,7 @@ export const Breadcrumbs = ({ items }: Props) => {
 
     return (
         <>
-            <script type="application/ld+json">
-                {html`${raw(JSON.stringify(jsonLd))}`}
-            </script>
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
             <nav aria-label="Breadcrumb" class="mb-4">
                 <ol class="flex items-center flex-wrap text-sm text-slate-500">
                     {items.map((item, index) => {
