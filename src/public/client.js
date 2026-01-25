@@ -181,9 +181,10 @@ function setupPicker(pickerId) {
         });
     });
 
+    const ITEM_HEIGHT = 64; // h-16 is 4rem = 64px
+
     // Custom Wheel Handling for "1 tick = 1 item" feel
     let isScrolling = false;
-    const ITEM_HEIGHT = 64; // h-16 is 4rem = 64px
 
     picker.addEventListener('wheel', (e) => {
         e.preventDefault();
@@ -212,39 +213,59 @@ function setupPicker(pickerId) {
         }, 50); 
     }, { passive: false });
 
-    // Observer to detect centered item
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            const el = entry.target;
-            if (entry.isIntersecting) {
-                // Highlight
-                el.classList.add('text-[#22215B]', 'scale-110', 'opacity-100');
-                el.classList.remove('text-slate-400', 'opacity-50');
-                
-                // Update state
-                const year = parseInt(el.dataset.year);
-                if (currentYear !== year) {
-                    currentYear = year;
-                    
-                    // Debounce update
-                    if (updateTimer) clearTimeout(updateTimer);
-                    updateTimer = setTimeout(() => {
-                        updateAll(year);
-                    }, 300); // 300ms debounce
-                }
-            } else {
-                // Unhighlight
-                el.classList.remove('text-[#22215B]', 'scale-110', 'opacity-100');
-                el.classList.add('text-slate-400', 'opacity-50');
-            }
-        });
-    }, {
-        root: picker,
-        rootMargin: '-45% 0px -45% 0px', // Narrow center detection
-        threshold: 0
-    });
+    // New Scroll Listener Logic using requestAnimationFrame and explicit index calculation
+    let isScrollingTicking = false;
+    let lastActiveIndex = -1;
 
-    items.forEach(item => observer.observe(item));
+    const onScroll = () => {
+        const scrollTop = picker.scrollTop;
+        const index = Math.round(scrollTop / ITEM_HEIGHT);
+
+        // Optimization: if index matches lastActiveIndex, skip DOM updates
+        if (index === lastActiveIndex) {
+            isScrollingTicking = false;
+            return;
+        }
+
+        // Validate index bounds
+        if (index < 0 || index >= items.length) {
+            isScrollingTicking = false;
+            return;
+        }
+
+        // Update Previous Active Item
+        if (lastActiveIndex >= 0 && lastActiveIndex < items.length) {
+            const prev = items[lastActiveIndex];
+            prev.classList.remove('text-[#22215B]', 'scale-110', 'opacity-100');
+            prev.classList.add('text-slate-400', 'opacity-50');
+        }
+
+        // Update Current Active Item
+        const current = items[index];
+        current.classList.add('text-[#22215B]', 'scale-110', 'opacity-100');
+        current.classList.remove('text-slate-400', 'opacity-50');
+
+        lastActiveIndex = index;
+
+        // Update Logic
+        const year = parseInt(current.dataset.year);
+        if (currentYear !== year) {
+            currentYear = year;
+            if (updateTimer) clearTimeout(updateTimer);
+            updateTimer = setTimeout(() => {
+                updateAll(year);
+            }, 300);
+        }
+
+        isScrollingTicking = false;
+    };
+
+    picker.addEventListener('scroll', () => {
+        if (!isScrollingTicking) {
+            window.requestAnimationFrame(onScroll);
+            isScrollingTicking = true;
+        }
+    }, { passive: true });
 }
 
 function updateAll(year) {
