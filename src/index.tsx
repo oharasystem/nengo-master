@@ -17,7 +17,7 @@ import { calculateResume } from "./utils/resume";
 import { getBaseUrl } from "./utils/url";
 import { HISTORY_TIMELINE } from "./const/historyTimeline";
 import { articles, allArticlesIncludingDraft } from "./data/articles";
-import { isPublished } from "./utils/articleFilter";
+import { isPublished, getPublishedArticles } from "./utils/articleFilter";
 
 // Locales
 import ja from "./locales/ja";
@@ -116,6 +116,9 @@ const homeHandler = async (c: any) => {
         console.error("Error:", e);
         initialData = { era: getEra(INITIAL_YEAR), trivia: { events: ["Error"], hitSongs: ["Error"] } };
     }
+
+    // Calculate published articles dynamically per request
+    const publishedArticles = getPublishedArticles(allArticlesIncludingDraft);
 
     const content = (
         <Layout title={dict.meta.title} description={dict.meta.description} keywords={dict.meta.keywords} lang={lang} dict={dict} path="/" env={c.env?.ENVIRONMENT} googleAdSenseId={c.env?.GOOGLE_ADSENSE_ID}>
@@ -235,7 +238,7 @@ const homeHandler = async (c: any) => {
                     )}
 
                     {/* New Columns Section - JA Only */}
-                    {lang === 'ja' && articles.length > 0 && (
+                    {lang === 'ja' && publishedArticles.length > 0 && (
                         <div class="w-full max-w-3xl mb-8">
                             <div class="flex items-center justify-between mb-4 px-1">
                                 <h2 class="text-xl font-bold text-[#22215B] flex items-center gap-2">
@@ -252,7 +255,7 @@ const homeHandler = async (c: any) => {
                                 </a>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {articles.slice(0, 4).map((article) => (
+                                {publishedArticles.slice(0, 4).map((article) => (
                                     <ArticleCard key={article.slug} article={article} />
                                 ))}
                             </div>
@@ -402,7 +405,8 @@ const articlesHandler = (c: any) => {
         lang = getLangFromPath(c.req.path);
     }
     const dict = getDict(lang);
-    return c.html((<ArticleIndex articles={articles} lang={lang} dict={dict} path="/articles" env={c.env?.ENVIRONMENT} googleAdSenseId={c.env?.GOOGLE_ADSENSE_ID} />).toString());
+    const publishedArticles = getPublishedArticles(allArticlesIncludingDraft);
+    return c.html((<ArticleIndex articles={publishedArticles} lang={lang} dict={dict} path="/articles" env={c.env?.ENVIRONMENT} googleAdSenseId={c.env?.GOOGLE_ADSENSE_ID} />).toString());
 };
 
 const articleDetailHandler = (c: any) => {
@@ -507,7 +511,8 @@ app.get("/sitemap.xml", (c) => {
 
     // Articles (JA only)
     generateEntry("/articles", "0.8", "weekly");
-    articles.forEach(a => {
+    const publishedArticles = getPublishedArticles(allArticlesIncludingDraft);
+    publishedArticles.forEach(a => {
         generateEntry(`/articles/${a.slug}`, "0.7", "monthly");
     });
 
