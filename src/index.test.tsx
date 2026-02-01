@@ -11,7 +11,9 @@ describe('App Integration', () => {
     expect(text).toContain('lang="ja"')
     // Verify Task 1: New About Section
     expect(text).toContain('年号マスターについて')
-    expect(text).toContain('入学・卒業年度の自動計算機能も備えており')
+    expect(text).toContain('便利な「入学・卒業年度の自動計算」や')
+    expect(text).toContain('よくある質問')
+    expect(text).toContain('対応している元号一覧')
   })
 
   it('GET /en/ should return 200 and English content', async () => {
