@@ -258,7 +258,7 @@ const homeHandler = async (c: any) => {
                                     <li>平成 (1989年1月8日〜2019年4月30日)</li>
                                     <li>昭和 (1926年12月25日〜1989年1月7日)</li>
                                     <li>大正 (1912年7月30日〜1926年12月24日)</li>
-                                    <li>明治 (1868年1月25日〜1912年7月29日)</li>
+                                    <li>明治 (1868年1月25日〜1912年7月29日) ※当サイトでは1900年以降に対応</li>
                                 </ul>
                             </div>
                         </div>
@@ -282,7 +282,7 @@ const homeHandler = async (c: any) => {
                                 </a>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {publishedArticles.slice(0, 4).map((article) => (
+                                {publishedArticles.slice(0, 6).map((article) => (
                                     <ArticleCard key={article.slug} article={article} />
                                 ))}
                             </div>
