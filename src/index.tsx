@@ -225,15 +225,42 @@ const homeHandler = async (c: any) => {
 
                     {/* About Section - JA Only */}
                     {lang === 'ja' && (
-                        <div class="w-full max-w-3xl bg-white p-6 rounded-xl border border-slate-100 shadow-sm mb-6">
-                            <h2 class="text-lg font-bold text-slate-700 mb-3">年号マスターについて</h2>
-                            <p class="text-sm text-slate-600 leading-relaxed mb-3">
-                                当サイトは、西暦と和暦（令和・平成・昭和・大正・明治）を瞬時に変換・確認できる無料ツールです。
-                                履歴書や職務経歴書の作成、役所への申請書類など、日常生活でふと「今の和暦」や「あの時の西暦」が必要になった際にご活用ください。
-                            </p>
-                            <p class="text-sm text-slate-600 leading-relaxed">
-                                入学・卒業年度の自動計算機能も備えており、学歴欄の記入ミスを防ぐのにも便利です。
-                            </p>
+                        <div class="w-full max-w-3xl bg-white p-6 rounded-xl border border-slate-100 shadow-sm mb-6 flex flex-col gap-6">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-700 mb-3 border-b border-slate-100 pb-2">年号マスターについて</h2>
+                                <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                                    「年号マスター」は、西暦と和暦（元号）を瞬時に変換できる無料ツールです。履歴書や職務経歴書の作成時に便利な「入学・卒業年度の自動計算」や、年齢確認、厄年のチェックなど、年代に関するあらゆる計算をサポートします。明治、大正、昭和、平成、そして最新の令和まで完全対応しています。
+                                </p>
+                            </div>
+
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-700 mb-3 border-b border-slate-100 pb-2">よくある質問</h2>
+                                <div class="space-y-4">
+                                    <div>
+                                        <h3 class="font-bold text-slate-800 text-sm mb-1">Q. 履歴書の年号は西暦と和暦どちらが良いですか？</h3>
+                                        <p class="text-sm text-slate-600 leading-relaxed">
+                                            A. 提出先の指定がない限り、どちらでも構いませんが、書類全体で統一することが重要です。一般的に、公的な書類や日本企業向けには「和暦（令和〇年）」、外資系やIT企業向けには「西暦（20xx年）」が好まれる傾向があります。
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-800 text-sm mb-1">Q. 早生まれの学年はどう計算しますか？</h3>
+                                        <p class="text-sm text-slate-600 leading-relaxed">
+                                            A. 日本の学校教育法では、4月1日生まれまでが「前の学年（早生まれ）」に含まれます。当サイトの計算ツールは、この基準に完全準拠して入学・卒業年度を算出しています。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-700 mb-3 border-b border-slate-100 pb-2">対応している元号一覧</h2>
+                                <ul class="list-disc list-inside text-sm text-slate-600 space-y-1">
+                                    <li>令和 (2019年5月1日〜現在)</li>
+                                    <li>平成 (1989年1月8日〜2019年4月30日)</li>
+                                    <li>昭和 (1926年12月25日〜1989年1月7日)</li>
+                                    <li>大正 (1912年7月30日〜1926年12月24日)</li>
+                                    <li>明治 (1868年1月25日〜1912年7月29日)</li>
+                                </ul>
+                            </div>
                         </div>
                     )}
 

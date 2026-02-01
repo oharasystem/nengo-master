@@ -3,7 +3,7 @@ import { getBaseUrl } from './url';
 
 describe('getBaseUrl', () => {
     it('should return production URL when env is production', () => {
-        expect(getBaseUrl('production')).toBe('https://nengo.solooo.dev');
+        expect(getBaseUrl('production')).toBe('https://solooo.dev');
     });
 
     it('should return development URL when env is undefined', () => {
@@ -16,7 +16,7 @@ describe('getBaseUrl', () => {
     });
 
     it('should append path to production URL', () => {
-        expect(getBaseUrl('production', '/year/2000')).toBe('https://nengo.solooo.dev/year/2000');
+        expect(getBaseUrl('production', '/year/2000')).toBe('https://solooo.dev/year/2000');
     });
 
     it('should append path to development URL', () => {
@@ -24,6 +24,6 @@ describe('getBaseUrl', () => {
     });
 
     it('should handle empty path', () => {
-        expect(getBaseUrl('production', '')).toBe('https://nengo.solooo.dev');
+        expect(getBaseUrl('production', '')).toBe('https://solooo.dev');
     });
 });
