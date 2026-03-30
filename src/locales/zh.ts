@@ -29,6 +29,7 @@ const zh: Translation = {
     btn_calc: "计算",
     modal_ad_title: "选择年份 (西历)",
     modal_era_title: "选择和历",
+    current_year_banner: "今年（{year}年）是{era}。",
   },
   year_page: {
     age_label: "该年出生者的年龄",

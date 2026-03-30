@@ -29,6 +29,7 @@ const vi: Translation = {
     btn_calc: "Tính toán",
     modal_ad_title: "Chọn năm (Tây lịch)",
     modal_era_title: "Chọn niên hiệu Nhật Bản",
+    current_year_banner: "Năm nay ({year}) là {era}.",
   },
   year_page: {
     age_label: "Tuổi của người sinh năm này",

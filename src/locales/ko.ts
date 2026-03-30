@@ -29,6 +29,7 @@ const ko: Translation = {
     btn_calc: "계산하기",
     modal_ad_title: "연도 선택 (AD)",
     modal_era_title: "일본 연호 선택",
+    current_year_banner: "올해({year}년)는 {era}입니다.",
   },
   year_page: {
     age_label: "이 해에 태어난 사람의 나이",
