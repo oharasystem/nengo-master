@@ -29,6 +29,7 @@ const pt: Translation = {
     btn_calc: "Calcular",
     modal_ad_title: "Selecionar Ano (AD)",
     modal_era_title: "Selecionar Era Japonesa",
+    current_year_banner: "Este ano ({year}) é {era}.",
   },
   year_page: {
     age_label: "Idade dos nascidos neste ano",

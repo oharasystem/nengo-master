@@ -120,10 +120,23 @@ const homeHandler = async (c: any) => {
     // Calculate published articles dynamically per request
     const publishedArticles = getPublishedArticles(allArticlesIncludingDraft);
 
+    // Get current year info for banner
+    const currentYearNum = getCurrentYear();
+    const currentEraStr = getEra(currentYearNum);
+    const bannerText = dict.home.current_year_banner.replace('{year}', currentYearNum.toString()).replace('{era}', currentEraStr);
+
     const content = (
         <Layout title={dict.meta.title} description={dict.meta.description} keywords={dict.meta.keywords} lang={lang} dict={dict} path="/" env={c.env?.ENVIRONMENT} googleAdSenseId={c.env?.GOOGLE_ADSENSE_ID}>
             <div class="flex-1 w-full relative overflow-y-auto bg-slate-50">
                 <div class="min-h-full flex flex-col items-center justify-start pt-8 pb-4 px-4">
+
+                    {/* Current Year Banner */}
+                    <div class="w-full max-w-3xl mb-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-lg shadow-sm text-center font-bold text-lg md:text-xl flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        {bannerText}
+                    </div>
 
                     {/* Navigation to Hub */}
                     <div class="mb-4 text-sm text-[#22215B] font-bold underline hover:opacity-80">

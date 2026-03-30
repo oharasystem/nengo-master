@@ -29,6 +29,7 @@ const ja: Translation = {
     btn_calc: "計算する",
     modal_ad_title: "西暦を選択",
     modal_era_title: "和暦を選択",
+    current_year_banner: "今年（{year}年）は{era}です。",
   },
   year_page: {
     age_label: "生まれの方の年齢",

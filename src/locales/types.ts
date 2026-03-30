@@ -27,6 +27,7 @@ export type Translation = {
     btn_calc: string;
     modal_ad_title: string;
     modal_era_title: string;
+    current_year_banner: string;
   };
   year_page: {
     age_label: string;
